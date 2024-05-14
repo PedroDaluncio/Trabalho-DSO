@@ -3,8 +3,8 @@ from outras_classes.item import Item
 
 class Consumivel(Item):
 
-    def __init__(self, duracao: int, nome: str,
-                 valor: int, efeito: str, dano: int):
+    def __init__(self, nome: str, valor: int,
+                 efeito: str, dano: int, duracao: int):
         super().__init__(nome, valor, efeito, dano)
         self.__duracao = duracao
 

@@ -3,8 +3,8 @@ from outras_classes.item import Item
 
 class Arremesavel(Item):
 
-    def __init__(self, alcance: float, nome: str,
-                 valor: int, efeito: str, dano: int):
+    def __init__(self, nome: str, valor: int,
+                 efeito: str, dano: int, alcance: float):
         super().__init__(nome, valor, efeito, dano)
         self.__alcance = alcance
 
