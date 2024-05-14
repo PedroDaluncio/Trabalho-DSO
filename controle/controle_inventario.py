@@ -5,6 +5,7 @@ from outras_classes.arremesavel import Arremesavel
 from outras_classes.consumivel import Consumivel
 from outras_classes.equipavel import Equipavel
 
+
 class ControleInventario:
     def __init__(self, controle_personagem: ControlePersonagem):
         self.__tela_inventario = TelaInventario()
@@ -39,38 +40,69 @@ class ControleInventario:
                 "ERRO: Insira um equipamento válido!")
 
     def remover_item(self, nome_item):
-        tipos_item = {1: Arremesavel, 2: Equipavel, 3: Consumivel}
         if isinstance(nome_item, str):
-            while True:
-                opcao_tipo_item = self.__tela_inventario.escolhe_tipo_item()
-                if opcao_tipo_item == 1:
-                    if self.__entidade_inventario.espaco_interno[Arremesavel]:
-                        for arremesavel in self.__entidade_inventario.espaco_interno[Arremesavel]:
-                            if arremesavel.nome == nome_item:
-                                self.__entidade_inventario.espaco_interno[Arremesavel].remove(arremesavel)
-                                print(f"O item {arremesavel} foi deletado com sucesso!")
-                                break
-                        print("Você não possui esse item")
-                    else:
-                        print("A lista de itens está vazia")
-                elif opcao_tipo_item == 2:
-                    if self.__entidade_inventario.espaco_interno[Equipavel]:
-                        for equipavel self.__entidade_inventario.espaco_interno[Equipavel]:
-                            if equipavel.nome == nome_item:
-                                self.__entidade_inventario.espaco_interno[Equipavel].remove(equipavel)
-                                print(f"O item {equipavel} foi deletado com sucesso!")
-                                break
-                        print("Você não possui esse item")
-                    else:
-                        print("A lista de itens está vazia")
+            opcao_tipo_item = self.__tela_inventario.escolhe_tipo_item()
+            if opcao_tipo_item == 1:
+                if self.__entidade_inventario.espaco_interno[Arremesavel]:
+                    for arremesavel in self.__entidade_inventario.espaco_interno[Arremesavel]:
+                        if arremesavel.nome == nome_item:
+                            self.__entidade_inventario.espaco_interno[Arremesavel].remove(
+                                arremesavel)
+                            self.__tela_inventario.mostra_mensagem(
+                                f"O item {arremesavel} foi deletado com sucesso!")
+                            break
+                    self.__tela_inventario.mostra_mensagem(
+                        "Você não possui esse item")
+                else:
+                    self.__tela_inventario.mostra_mensagem(
+                        "A lista de itens está vazia")
+            elif opcao_tipo_item == 2:
+                if self.__entidade_inventario.espaco_interno[Equipavel]:
+                    for equipavel in self.__entidade_inventario.espaco_interno[Equipavel]:
+                        if equipavel.nome == nome_item:
+                            self.__entidade_inventario.espaco_interno[Equipavel].remove(
+                                equipavel)
+                            self.__tela_inventario.mostra_mensagem(
+                                f"O item {equipavel} foi deletado com sucesso!")
+                            break
+                    self.__tela_inventario.mostra_mensagem(
+                        "Você não possui esse item")
+                else:
+                    self.__tela_inventario.mostra_mensagem(
+                        "A lista de itens está vazia")
+            elif opcao_tipo_item == 3:
+                if self.__entidade_inventario.espaco_interno[Consumivel]:
+                    for consumivel in self.__entidade_inventario.espaco_interno[Consumivel]:
+                        if consumivel.nome == nome_item:
+                            self.__entidade_inventario.espaco_interno[Consumivel].remove(
+                                consumivel)
+                            self.__tela_inventario.mostra_mensagem(
+                                f"O item {consumivel} foi deletado com sucesso!")
+                            break
+                    self.__tela_inventario.mostra_mensagem(
+                        "Você não possui esse item")
+                else:
+                    self.__tela_inventario.mostra_mensagem(
+                        "A lista de itens está vazia")
+            elif opcao_tipo_item == 0:
+                self.mostra_tela()
+            else:
+                self.__tela_inventario.mostra_mensagem(
+                    "ERRO: Tipo de item inválido!")
 
+    def listar_itens(self, tipo_item):
+        for item in self.__entidade_inventario.espaco_interno[tipo_item]:
+            self.__tela_inventario.mostra_mensagem(f"{item.nome}")
 
-
-
+    def listar_inventario(self):
+        tipos_item = {1: Consumivel, 2: Arremesavel, 3: Equipavel}
+        contador = 1
+        while contador <= 3:
+            for item in self.__entidade_inventario.espaco_interno[contador]:
+                self.__tela_inventario.mostra_mensagem(f"{item.nome}")
+            contador += 1
 
 
 
 a = {Consumivel: [Consumivel(15, "a", 45, "a", 78)]}
 a[Consumivel].append("ola")
-
-
