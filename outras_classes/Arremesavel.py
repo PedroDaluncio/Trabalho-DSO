@@ -1,4 +1,4 @@
-from item import Item
+from outras_classes.item import Item
 
 
 class Arremesavel(Item):
