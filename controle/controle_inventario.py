@@ -102,7 +102,21 @@ class ControleInventario:
                 self.__tela_inventario.mostra_mensagem(f"{item.nome}")
             contador += 1
 
+    def atualizar_consumivel(self, item_ser_atualizado, mudar_atributo, novo_valor):
+        if mudar_atributo not in (1, 2, 3, 4, 6):
+            self.__tela_inventario.mostra_mensagem("ERRO: O item não possui esse atributo!")
+            self.mostra_tela()
+        for item in self.__entidade_inventario.espaco_interno[Consumivel]:
+            if item.nome == item_ser_atualizado:
+                if mudar_atributo == 1:
+                    item.nome = novo_valor
+                elif mudar_atributo == 2:
+                    item.valor = novo_valor
+                elif mudar_atributo == 3:
+                    item.efeito = novo_valor
+                elif mudar_atributo == 4:
+                    item.dano = novo_valor
+                else:
+                    item.duracao = novo_valor
 
 
-a = {Consumivel: [Consumivel(15, "a", 45, "a", 78)]}
-a[Consumivel].append("ola")

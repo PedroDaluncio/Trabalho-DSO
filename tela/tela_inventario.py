@@ -134,6 +134,10 @@ class TelaInventario():
         opcao = input("Digite a sua escolha: ")
         return opcao
 
+    def pega_nome_item_atualizar(self):
+        nome_item = input("Digite o nome do item que será atualizado: ")
+        return nome_item
+
     def pega_dado_atualizacao(self):
         dado = input("Insira o novo valor: ")
         return dado
