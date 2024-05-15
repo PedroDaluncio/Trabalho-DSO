@@ -118,13 +118,14 @@ class ControleInventario:
 
     def listar_inventario(self):
         tipos_item = {1: Consumivel, 2: Arremesavel, 3: Equipavel}
+        itens = self.__entidade_inventario.espaco_interno()
         str_tipos_item = {1: "Consumivel",
                           2: "Arremesavel",
                           3: "Equipavel"}
         contador = 1
         while contador <= 3:
             self.__tela_inventario.listar_inventario(
-                tipos_item[contador], str_tipos_item[contador])
+                itens[tipos_item[contador]], str_tipos_item[contador])
             contador += 1
 
     def atualizar_item(self):
