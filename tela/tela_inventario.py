@@ -110,17 +110,16 @@ class TelaInventario():
         for item in lista_itens:
             print(item.nome)
 
-    def listar_inventario(self, inventario):
-        for tipo_item in inventario:
-            print(f"Items do tipo {tipo_item}:")
-            for item in inventario[tipo_item]:
-                if item == inventario[tipo_item][-1]:
-                    print(item.nome, end="")
-                else:
-                    print(item.nome, end=", ")
-            print("")
+    def listar_inventario(self, itens, tipo_item):
+        print(f"Items do tipo {tipo_item}:")
+        for item in itens:
+            if item == itens[-1]:
+                print(item.nome, end="")
+            else:
+                print(item.nome, end=", ")
+        print("")
 
-    def opcoes_atualizacao_arremesavel(self):
+    def opcoes_atualizacao(self):
         print("-------- ATUALIZAR ITEM ----------")
         print("Escolha o que deseja atualizar")
         print("1 - Nome")
@@ -128,41 +127,21 @@ class TelaInventario():
         print("3 - Efeito")
         print("4 - Dano")
         print("5 - Alcance")
+        print("6 - Duracao")
+        print("7 - Durabilidade")
         print("0 - Voltar")
-        opcao = input("Digite a sua escolha: ")
+        opcao = int(input("Digite a sua escolha: "))
+        while opcao < 0 or opcao > 7:
+            opcao = int(input("ESCOLHA INVÁLIDA! INSIRA NOVAMENTE: "))
         return opcao
-
-    def opcoes_atualizacao_equipavel(self):
-        print("-------- ATUALIZAR ITEM ----------")
-        print("Escolha o que deseja atualizar")
-        print("1 - Nome")
-        print("2 - Valor")
-        print("3 - Efeito")
-        print("4 - Dano")
-        print("5 - Durabilidade")
-        print("0 - Voltar")
-        opcao = input("Digite a sua escolha: ")
-        return opcao
-
-    def opcoes_atualizacao_consumivel(self):
-        print("-------- ATUALIZAR ITEM ----------")
-        print("Escolha o que deseja atualizar")
-        print("1 - Nome")
-        print("2 - Valor")
-        print("3 - Efeito")
-        print("4 - Dano")
-        print("5 - Duracao")
-        print("0 - Voltar")
-        opcao = input("Digite a sua escolha: ")
-        return opcao
-
-    def pega_nome_item_atualizar(self):
-        nome_item = input("Digite o nome do item que será atualizado: ")
-        return nome_item
 
     def pega_dado_atualizacao(self):
         dado = input("Insira o novo valor: ")
         return dado
+
+    def pega_nome_item_atualizar(self):
+        nome_item = input("Digite o nome do item que será atualizado: ")
+        return nome_item
 
     def mostra_mensagem(self, mensagem: str):
         print(mensagem)
