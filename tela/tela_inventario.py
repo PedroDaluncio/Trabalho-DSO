@@ -120,7 +120,7 @@ class TelaInventario():
                     print(item.nome, end=", ")
             print("")
 
-    def opcoes_atualizacao(self):
+    def opcoes_atualizacao_arremesavel(self):
         print("-------- ATUALIZAR ITEM ----------")
         print("Escolha o que deseja atualizar")
         print("1 - Nome")
@@ -128,8 +128,30 @@ class TelaInventario():
         print("3 - Efeito")
         print("4 - Dano")
         print("5 - Alcance")
-        print("6 - Duracao")
-        print("7 - Durabilidade")
+        print("0 - Voltar")
+        opcao = input("Digite a sua escolha: ")
+        return opcao
+
+    def opcoes_atualizacao_equipavel(self):
+        print("-------- ATUALIZAR ITEM ----------")
+        print("Escolha o que deseja atualizar")
+        print("1 - Nome")
+        print("2 - Valor")
+        print("3 - Efeito")
+        print("4 - Dano")
+        print("5 - Durabilidade")
+        print("0 - Voltar")
+        opcao = input("Digite a sua escolha: ")
+        return opcao
+
+    def opcoes_atualizacao_consumivel(self):
+        print("-------- ATUALIZAR ITEM ----------")
+        print("Escolha o que deseja atualizar")
+        print("1 - Nome")
+        print("2 - Valor")
+        print("3 - Efeito")
+        print("4 - Dano")
+        print("5 - Duracao")
         print("0 - Voltar")
         opcao = input("Digite a sua escolha: ")
         return opcao

@@ -27,7 +27,7 @@ class ControleInventario:
                 atributos_item["alcance"]
             ))
             self.__tela_inventario.mostra_mensagem(
-                f"O item {atributos_item["nome"]} foi adicionado ao inventário!")
+                f"O item {atributos_item['nome']} foi adicionado ao inventário!")
         elif tipo_item == 2:
             atributos_item = self.__tela_inventario.dados_equipavel()
             self.__entidade_inventario.espaco_interno(Equipavel(
@@ -38,7 +38,7 @@ class ControleInventario:
                 atributos_item["durabilidade"]
             ))
             self.__tela_inventario.mostra_mensagem(
-                f"O item {atributos_item["durabilidade"]} foi adicionado ao inventário!")
+                f"O item {atributos_item['durabilidade']} foi adicionado ao inventário!")
         elif tipo_item == 3:
             atributos_item = self.__tela_inventario.dados_consumivel()
             self.__entidade_inventario.espaco_interno(Consumivel(
@@ -49,7 +49,7 @@ class ControleInventario:
                 atributos_item["duracao"]
             ))
             self.__tela_inventario.mostra_mensagem(
-                f"O item {atributos_item["duracao"]} foi adicionado ao inventário!")
+                f"O item {atributos_item['duracao']} foi adicionado ao inventário!")
         elif tipo_item == 0:
             self.mostra_tela()
         else:
@@ -112,8 +112,10 @@ class ControleInventario:
                 "ERRO: Insira um nome válido!"
             )
 
-    def listar_itens(self, tipo_item):
-        for item in self.__entidade_inventario.espaco_interno[tipo_item]:
+    def listar_itens(self):
+        opcao_tipo_item = self.__tela_inventario.escolhe_tipo_item()
+        tipo_item = {1: Arremesavel, 2: Equipavel, 3: Consumivel}
+        for item in self.__entidade_inventario.espaco_interno[tipo_item[opcao_tipo_item]]:
             self.__tela_inventario.mostra_mensagem(f"{item.nome}")
 
     def listar_inventario(self):
@@ -124,60 +126,55 @@ class ControleInventario:
                 self.__tela_inventario.mostra_mensagem(f"{item.nome}")
             contador += 1
 
-    def atualizar_consumivel(self, item_ser_atualizado, mudar_atributo, novo_valor):
-        if mudar_atributo not in (1, 2, 3, 4, 6):
-            self.__tela_inventario.mostra_mensagem("ERRO: O item não possui esse atributo!")
+    def atualizar_item(self):
+        opcao_tipo_item = self.__tela_inventario.escolhe_tipo_item() #1,2,3,0
+        if opcao_tipo_item == 0:
             self.mostra_tela()
-        for item in self.__entidade_inventario.espaco_interno[Consumivel]:
-            if item.nome == item_ser_atualizado:
-                if mudar_atributo == 1:
-                    item.nome = novo_valor
-                elif mudar_atributo == 2:
-                    item.valor = novo_valor
-                elif mudar_atributo == 3:
-                    item.efeito = novo_valor
-                elif mudar_atributo == 4:
-                    item.dano = novo_valor
-                else:
-                    item.duracao = novo_valor
-
-    def atualizar_arremesavel(self, item_ser_atualizado, mudar_atributo, novo_valor):
-        if mudar_atributo not in (1, 2, 3, 4, 5):
-            self.__tela_inventario.mostra_mensagem("ERRO: O item não possui esse atributo!")
+        elif opcao_tipo_item < 0 or opcao_tipo_item > 3:
+            self.__tela_inventario.mostra_mensagem(
+                "ERRO! Esse tipo de item não existe!")
             self.mostra_tela()
-        for item in self.__entidade_inventario.espaco_interno[Arremesavel]:
-            if item.nome == item_ser_atualizado:
-                if mudar_atributo == 1:
-                    item.nome = novo_valor
-                elif mudar_atributo == 2:
-                    item.valor = novo_valor
-                elif mudar_atributo == 3:
-                    item.efeito = novo_valor
-                elif mudar_atributo == 4:
-                    item.dano = novo_valor
-                else:
-                    item.alcance = novo_valor
-
-    def atualizar_equipamento(self, item_ser_atualizado, mudar_atributo, novo_valor):
-        if mudar_atributo not in (1, 2, 3, 4, 7):
-            self.__tela_inventario.mostra_mensagem("ERRO: O item não possui esse atributo!")
+        tipo_item = {1: Arremesavel, 2: Equipavel, 3: Consumivel}
+        inventario_tipo_item = self.__entidade_inventario.espaco_interno[
+            tipo_item[opcao_tipo_item]]()
+        item_ser_atualizado = self.__tela_inventario.pega_nome_item_atualizar()
+        mudar_atributo = self.__tela_inventario.opcoes_atualizacao()
+        novo_valor = self.__tela_inventario.pega_dado_atualizacao()
+        if inventario_tipo_item:
+            for item in inventario_tipo_item:
+                if item.nome == item_ser_atualizado:
+                    if mudar_atributo == 1:
+                        item.nome = novo_valor
+                    elif mudar_atributo == 2:
+                        item.valor = novo_valor
+                    elif mudar_atributo == 3:
+                        item.efeito = novo_valor
+                    elif mudar_atributo == 4:
+                        item.dano = novo_valor
+                    elif mudar_atributo == 5 and opcao_tipo_item == 1:
+                        item.alcance = novo_valor
+                    elif mudar_atributo == 6 and opcao_tipo_item == 3:
+                        item.duracao = novo_valor
+                    elif mudar_atributo == 7 and opcao_tipo_item == 2:
+                        item.durabilidade = novo_valor
+                    else:
+                        self.__tela_inventario.mostra_mensagem(
+                        "ERRO: O item não possui esse atributo!")
+                        self.mostra_tela()
+                elif item == inventario_tipo_item[-1] and item.nome != item_ser_atualizado:
+                    self.__tela_inventario.mostra_mensagem("ERRO! Você não possui esse item!")
+                    self.mostra_tela()
+        else:
+            self.__tela_inventario.mostra_mensagem("ERRO! A lista de itens está vazia!")
             self.mostra_tela()
-        for item in self.__entidade_inventario.espaco_interno[Equipavel]:
-            if item.nome == item_ser_atualizado:
-                if mudar_atributo == 1:
-                    item.nome = novo_valor
-                elif mudar_atributo == 2:
-                    item.valor = novo_valor
-                elif mudar_atributo == 3:
-                    item.efeito = novo_valor
-                elif mudar_atributo == 4:
-                    item.dano = novo_valor
-                else:
-                    item.durabilidade = novo_valor
+        self.__tela_inventario.mostra_mensagem("O item foi atualizado com sucesso!")
 
     def mostra_tela(self):
-        tipos_item = {1: Arremesavel, 2: Equipavel, 3: Consumivel, 0: self.mostra_tela}
-
-
-
-
+        opcoes = {1: self.adicionar_item,
+                  2: self.remover_item,
+                  3: self.listar_itens,
+                  4: self.listar_inventario,
+                  5: self.atualizar_item,
+                  0: self.__controle_personagem.mostra_tela}
+        while True:
+            opcoes[self.__tela_inventario.tela_opcoes()]()
