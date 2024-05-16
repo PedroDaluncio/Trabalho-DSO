@@ -1,22 +1,23 @@
-from controle_personagem import ControlePersonagem
+#from controle_personagem import ControlePersonagem
 from tela.tela_inventario import TelaInventario
-from entidade.inventario import Inventario
-from outras_classes.arremesavel import Arremesavel
-from outras_classes.consumivel import Consumivel
+from entidade.Inventario import Inventario
+from outras_classes.Arremesavel import Arremesavel
+from outras_classes.Consumivel import Consumivel
 from outras_classes.equipavel import Equipavel
 
 
 class ControleInventario:
-    def __init__(self, controle_personagem: ControlePersonagem):
+    def __init__(self):
+        #controle_personagem:ControlePersonagem
         self.__tela_inventario = TelaInventario()
         self.__entidade_inventario = Inventario()
-        self.__controle_personagem = ControlePersonagem()
+        #self.__controle_personagem = ControlePersonagem()
 
     def adicionar_item(self):
         tipo_item = self.__tela_inventario.escolhe_tipo_item()
         if tipo_item == 1:
             atributos_item = self.__tela_inventario.dados_arremesavel()
-            self.__entidade_inventario.espaco_interno(Arremesavel(
+            self.__entidade_inventario.espaco_interno(Arremesavel, Arremesavel(
                 atributos_item["nome"],
                 atributos_item["valor"],
                 atributos_item["efeito"],
@@ -27,7 +28,7 @@ class ControleInventario:
                 f"O item {atributos_item['nome']} foi adicionado ao inventário!")
         elif tipo_item == 2:
             atributos_item = self.__tela_inventario.dados_equipavel()
-            self.__entidade_inventario.espaco_interno(Equipavel(
+            self.__entidade_inventario.espaco_interno(Equipavel, Equipavel(
                 atributos_item["nome"],
                 atributos_item["valor"],
                 atributos_item["efeito"],
@@ -38,7 +39,7 @@ class ControleInventario:
                 f"O item {atributos_item['durabilidade']} foi adicionado ao inventário!")
         elif tipo_item == 3:
             atributos_item = self.__tela_inventario.dados_consumivel()
-            self.__entidade_inventario.espaco_interno(Consumivel(
+            self.__entidade_inventario.espaco_interno(Consumivel, Consumivel(
                 atributos_item["nome"],
                 atributos_item["valor"],
                 atributos_item["efeito"],
@@ -118,7 +119,7 @@ class ControleInventario:
 
     def listar_inventario(self):
         tipos_item = {1: Consumivel, 2: Arremesavel, 3: Equipavel}
-        itens = self.__entidade_inventario.espaco_interno()
+        itens = self.__entidade_inventario.espaco_interno
         str_tipos_item = {1: "Consumivel",
                           2: "Arremesavel",
                           3: "Equipavel"}
