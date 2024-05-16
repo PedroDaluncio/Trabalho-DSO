@@ -14,5 +14,6 @@ class Inventario:
         return self.__espaco_interno
 
     @espaco_interno.setter
-    def espaco_interno(self, classe, item):
+    def espaco_interno(self, parametros):
+        classe , item = parametros
         self.__espaco_interno[classe].append(item)

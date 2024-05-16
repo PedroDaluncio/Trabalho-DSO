@@ -17,6 +17,7 @@ class TelaInventario():
         return opcao
 
     def escolhe_tipo_item(self):
+        self.mostra_mensagem('')
         print("-------- SELEÇÃO DO TIPO DE ITEM ----------")
         print("Escolha a opcao")
         print("1 - Arremesável")
