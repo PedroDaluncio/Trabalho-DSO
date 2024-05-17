@@ -1,5 +1,5 @@
-from controle.controle_inventario import ControleInventario
+from controle.controle_personagem import ControlePersonagem
 
 
 if __name__ == "__main__":
-    ControleInventario().mostra_tela()
+    ControlePersonagem().mostra_tela()
