@@ -63,7 +63,7 @@ class TelaPersonagem:
             opcao = input("Entrada inválida, digite novamente: ")
         return opcao
 
-    def pega_nome_personagem_atualizar(self):
+    def pega_nome_personagem(self):
         personagem = input("Insira o nome do personagem: ")
         return personagem
 
