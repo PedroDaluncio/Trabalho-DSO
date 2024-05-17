@@ -4,15 +4,15 @@ import datetime
 
 
 class Sessao:
-    def __init__(self, data: datetime, lista_jogadores: Jogador, personagens_participantes: Personagem):
-        self.__jogadores = []
-        self.__personagens_participantes = []
+    def __init__(self, data: datetime, jogadores: list, personagens_participantes: list):
+        self.__jogadores = jogadores
+        self.__personagens_participantes = personagens_participantes
         if isinstance(data, datetime.datetime):
             self.__data = data
-        if isinstance(lista_jogadores, Jogador):
-            self.__jogadores.append(lista_jogadores)
-        if isinstance(personagens_participantes, Personagem):
-            self.__personagens_participantes.append(personagens_participantes)
+        if isinstance(jogadores, list):
+            self.__jogadores = jogadores
+        if isinstance(personagens_participantes, list):
+            self.__personagens_participantes = personagens_participantes
 
     @property
     def data(self):

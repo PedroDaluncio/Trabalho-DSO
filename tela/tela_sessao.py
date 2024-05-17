@@ -1,3 +1,4 @@
+import datetime
 
 
 class TelaSessao:
@@ -11,6 +12,14 @@ class TelaSessao:
         print("0 - Voltar")
         opcao = int(input("Escolha uma opção: "))
         return opcao
-    def obter_dados_sessao(self):
-        print("-------- Dados da Sessão --------")
-        data = input("")
+
+    def obter_data_sessao(self):
+        print("-------- Data da Sessão --------")
+        data = input("insira a data da sessão no formato (dia, mês, ano, hora, minuto): ")
+        if isinstance(data, datetime.datetime):
+            return data
+        else:
+            self.mostrar_mensagem("data inválida")
+
+    def mostrar_mensagem(self, mensagem):
+        print(mensagem)

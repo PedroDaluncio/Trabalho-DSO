@@ -52,6 +52,9 @@ class ControleJogador:
         if len(self.__lista_de_jogadores) == 0:
             self.__tela_jogador.mostrar_mensagem("Não há jogadores cadastrados")
 
+    def selecionar_jogador(self):
+        self.__tela_jogador.seleciona_jogador()
+
     def excluir_jogador(self):
         self.listar_jogadores()
         nome_jogador = self.__tela_jogador.seleciona_jogador()

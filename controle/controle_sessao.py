@@ -9,4 +9,7 @@ class ControleSessao:
         self.__lista_registros = []
 
     def registrar_sessao(self):
-        dados_sesao = self.__tela_sessao.obter_dados_sessao()
+        data_sessao = self.__tela_sessao.obter_data_sessao()
+        jogador = self.__controle_principal.controle_jogador.selecionar_jogador
+        lista_jogadores = []
+
