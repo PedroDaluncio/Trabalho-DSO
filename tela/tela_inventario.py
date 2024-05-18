@@ -27,6 +27,7 @@ class TelaInventario():
         opcao = int(input("Escolha a opção: "))
         while opcao not in (0, 1, 2, 3):
             opcao = input("Entrada inválida, digite novamente: ")
+        self.mostra_mensagem('')
         return opcao
 
     def dados_consumivel(self):
@@ -112,13 +113,16 @@ class TelaInventario():
             print(item.nome)
 
     def listar_inventario(self, itens, tipo_item):
-        print(f"Items do tipo {tipo_item}:")
-        for item in itens:
-            if item == itens[-1]:
-                print(item.nome, end="")
-            else:
-                print(item.nome, end=", ")
         print("")
+        print(f"Items do tipo {tipo_item}:")
+        if not itens:
+            print("Você não possui nenhum item desse tipo!")
+        else:
+            for item in itens:
+                if item == itens[-1]:
+                    print(item.nome, end="")
+                else:
+                    print(item.nome, end=", ")
 
     def opcoes_atualizacao(self):
         print("-------- ATUALIZAR ITEM ----------")
