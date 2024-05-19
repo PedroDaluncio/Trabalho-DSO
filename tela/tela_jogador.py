@@ -30,7 +30,7 @@ class TelaJogador:
         print("\n")
 
     def seleciona_jogador(self):
-        nome = input("Nome do jogador que deseja selecionar: ")
+        nome = input("Insira o nome do jogador que deseja selecionar: ")
         return nome
 
     def mostrar_mensagem(self, mensagem):

@@ -53,7 +53,13 @@ class ControleJogador:
             self.__tela_jogador.mostrar_mensagem("Não há jogadores cadastrados")
 
     def selecionar_jogador(self):
-        self.__tela_jogador.seleciona_jogador()
+        nome_jogador = self.__tela_jogador.seleciona_jogador()
+        jogador_selecionado = self.busca_jogador_por_nome(nome_jogador)
+        if jogador_selecionado is not None:
+            return jogador_selecionado
+        else:
+            self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
+
 
     def excluir_jogador(self):
         self.listar_jogadores()
