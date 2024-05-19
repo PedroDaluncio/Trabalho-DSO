@@ -11,6 +11,14 @@ class ControleInventario:
         self.__entidade_inventario = Inventario()
         self.__controle_personagem = controle_personagem
 
+    def cria_inventario(self, nome_personagem):
+        self.__entidade_inventario.cria_inventario(nome_personagem , {
+            Arremesavel: [],
+            Consumivel: [],
+            Equipavel: [],
+        })
+        self.__entidade_inventario.personagem = nome_personagem
+
     def adicionar_item(self):
         tipo_item = self.__tela_inventario.escolhe_tipo_item()
         if tipo_item == 1:
@@ -137,9 +145,8 @@ class ControleInventario:
         str_tipos_item = {1: "Arremesavel",
                           2: "Consumivel",
                           3: "Equipavel"}
-        if not self.__entidade_inventario.espaco_interno[Arremesavel] and \
-            self.__entidade_inventario.espaco_interno[Consumivel] and \
-            self.__entidade_inventario.espaco_interno[Equipavel]:
+        if not itens[Arremesavel] and \
+            itens[Consumivel] and itens[Equipavel]:
                 self.__tela_inventario.mostra_mensagem("ERRO: A LISTA DE ITENS ESTÁ VAZIA!")
                 return
         contador = 1
@@ -191,6 +198,9 @@ class ControleInventario:
         self.__tela_inventario.mostra_mensagem(
             "O item foi atualizado com sucesso!")
         self.__tela_inventario.mostra_mensagem('')
+
+    def atualizar_personagem_inventario(self, personagem):
+        self.__entidade_inventario.personagem = personagem
 
     def pega_itens_relatorio(self):
         return [self.__entidade_inventario.itens_adquiridos,

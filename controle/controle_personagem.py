@@ -17,6 +17,7 @@ class ControlePersonagem:
                                                     dados["nivel"],
                                                     dados["classe"],
                                                     dados["raça"]))
+        self.__controle_inventario.cria_inventario(dados["nome"])
         self.__tela_personagem.mostra_mensagem(
             f'O personagem {dados["nome"]} foi cadastrado com sucesso!')
 
@@ -55,7 +56,8 @@ class ControlePersonagem:
                     if valor_atualizar == 1:
                         personagem.classe = novo_valor
                         self.__tela_personagem.mostra_mensagem(
-                            f"A classe do personagem foi alterada para: {personagem.classe}")
+                            "A classe do personagem foi"
+                            f" alterada para: {personagem.classe}")
                     elif valor_atualizar == 2:
                         novo_valor = int(novo_valor)
                         qt_niveis_subidos = novo_valor - personagem.nivel
@@ -74,24 +76,44 @@ class ControlePersonagem:
         self.__tela_personagem.listar_personagens(self.__personagens)
 
     def gerar_relatorio(self):
-        personagem_relatorio = self.__tela_personagem.pega_nome_personagem()
-        novos_itens = self.__controle_inventario.pega_itens_relatorio()
-        for personagem in self.__personagens:
-            if personagem.nome == personagem_relatorio:
-                niveis_adquiridos = personagem.qt_niveis_adquiridos
-                itens_adquiridos = novos_itens[0]
-                itens_perdidos = novos_itens[1]
-                self.__tela_personagem.mostra_relatorio({
-                    'Niveis': niveis_adquiridos,
-                    'Itens Adquiridos': itens_adquiridos,
-                    'Itens Perdidos': itens_perdidos
-                })
-                return
-        self.__tela_personagem.mostra_mensagem(
-            "ERRO! O PERSONAGEM INFORMADO NÃO ESTÁ CADASTRADO!")
+        if self.__personagens:
+            personagem_relatorio = self.__tela_personagem.pega_nome_personagem()
+            novos_itens = self.__controle_inventario.pega_itens_relatorio()
+            for personagem in self.__personagens:
+                if personagem.nome == personagem_relatorio:
+                    niveis_adquiridos = personagem.qt_niveis_adquiridos
+                    itens_adquiridos = novos_itens[0][personagem_relatorio]
+                    itens_perdidos = novos_itens[1][personagem_relatorio]
+                    self.__tela_personagem.mostra_relatorio({
+                        'Niveis': niveis_adquiridos,
+                        'Itens Adquiridos': itens_adquiridos,
+                        'Itens Perdidos': itens_perdidos
+                    })
+                    return
+            self.__tela_personagem.mostra_mensagem(
+                "ERRO! O PERSONAGEM INFORMADO NÃO ESTÁ CADASTRADO!")
+        else:
+            self.__tela_personagem.mostra_mensagem(
+                "ERRO! NÃO HÁ PERSONAGENS CADASTRADOS!")
 
     def acessar_inventario(self):
-        self.__controle_inventario.mostra_tela()
+        if self.__personagens:
+            self.listar_personagens()
+            dono_inventario = input(
+                "Deseja acessar o inventário de qual personagem? ")
+            for personagem in self.__personagens:
+                if personagem.nome == dono_inventario:
+                    self.__controle_inventario.atualizar_personagem_inventario(dono_inventario)
+                    self.__controle_inventario.mostra_tela()
+            self.__tela_personagem.mostra_mensagem(
+                "ERRO! ESSE PERSONAGEM NÃO EXISTE!")
+        else:
+            self.__tela_personagem.mostra_mensagem(
+                "ERRO! NÃO HÁ NENHUM PERSONAGEM CADASTRADO,"
+                    " LOGO, NÃO É POSSÍVEL ACESSAR O INVENTÁRIO!")
+
+    def perga_personagem_no_inventario(self):
+        return self.__personagem.personagem_no_inventario
 
     def retornar(self):
         self.__controle_principal.abre_tela()
