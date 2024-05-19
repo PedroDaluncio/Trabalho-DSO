@@ -15,16 +15,24 @@ class ControlePersonagem:
     def adicionar_personagem(self):
         #pega os dados do personagem
         dados = self.__tela_personagem.pega_dados_personagem()
+        #verifica se o personagem já existe
+        if self.__personagens:
+            for personagem in self.__personagens:
+                if personagem.nome == dados["nome"]:
+                    self.__tela_personagem.mostra_mensagem(
+                        "ERRO! O PERSONAGEM JÁ EXISTE!")
+                    self.mostra_tela()
         #cria o personagem usando esses dados e o adiciona na lista de
         #personagens
         self.__personagens.append(self.__personagem(dados["nome"],
-                                                    dados["nivel"],
-                                                    dados["classe"],
-                                                    dados["raça"]))
+                                                        dados["nivel"],
+                                                        dados["classe"],
+                                                        dados["raça"]))
         #cria o inventário do personagem
         self.__controle_inventario.cria_inventario(dados["nome"])
         self.__tela_personagem.mostra_mensagem(
-            f'O personagem {dados["nome"]} foi cadastrado com sucesso!')
+            f'O personagem {dados["nome"]}'
+            ' foi cadastrado com sucesso!')
 
     #método que remove o personagem
     def remover_personagem(self):
