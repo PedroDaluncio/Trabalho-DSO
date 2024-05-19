@@ -58,6 +58,7 @@ class TelaPersonagem:
 
     #mostra todos os personagens existentes
     def listar_personagens(self, lista_personagens):
+        print("PERSONAGENS ATUALMENTE CADASTRADOS:")
         for personagem in lista_personagens:
             #faz uma verificação para inserir ou não a vírgula após o
             # nome do personagem
@@ -88,6 +89,14 @@ class TelaPersonagem:
     #faz o usuário digitar um novo valor para atualizar o personagem
     def pega_dado_atualizacao(self):
         dado = input("Insira o novo valor: ")
+        if not all(caractere.isalpha() or caractere.isspace() \
+            for caractere in dado):
+            while '.' or "-" in dado:
+                dado = input("VALOR INVÁLIDO! INSIRA NOVAMENTE: ")
+                if all(caractere.isdigit() for caractere in dado) and \
+                    '.' not in dado:
+                        dado = int(dado)
+                        break
         return dado
 
     #mostra o relatório para o usuário
@@ -103,6 +112,7 @@ class TelaPersonagem:
                 #     print('')
         else:
             print("O PERSONAGEM NÃO ADQUIRIU NENHUM ITEM NOVO!")
+        print('')
         #verifica se o usuário perdeu algum item
         if relatorio['Itens Perdidos']:
             for itens_perdidos in relatorio['Itens Perdidos']:
@@ -112,7 +122,6 @@ class TelaPersonagem:
                 #     print('')
         else:
             print("O PERSONAGEM NÃO PERDEU NENHUM ITEM!")
-        print('')
 
     #mostra uma mensagem ao usuário
     def mostra_mensagem(self, mensagem):

@@ -47,13 +47,13 @@ class ControlePersonagem:
                     self.__personagens.remove(personagem)
                     self.__tela_personagem.mostra_mensagem(
                         f"O personagem {personagem.nome}"
-                        "foi excluído com sucesso!")
+                        " foi excluído com sucesso!")
                     return
             self.__tela_personagem.mostra_mensagem(
                 "O personagem não existe!")
         else:
             self.__tela_personagem.mostra_mensagem(
-                "Não há nenhum personagem cadastrado!")
+                "ERRO! NÃO HÁ NENHUM PERSONAGEM CADASTRADO")
 
     #método que irá atualizar a classe ou o nível de um personagem
     def atualizar_personagem(self):
@@ -61,8 +61,6 @@ class ControlePersonagem:
         #o usuário
         if self.__personagens:
             #lista todos os personagens cadastrados
-            self.__tela_personagem.mostra_mensagem(
-                "PERSONAGENS EXISTENTES:")
             self.listar_personagens()
             #pega o nome do personagem que será atualizado
             personagem_atualizar = \
@@ -89,9 +87,13 @@ class ControlePersonagem:
                     #verifica se o personagem quer atualizar o nível do
                     #personagem
                     elif valor_atualizar == 2:
-                        novo_valor = int(novo_valor)
                         #calcula quantos níveis o personagem subiu
                         qt_niveis_subidos = novo_valor - personagem.nivel
+                        if qt_niveis_subidos <= personagem.nivel:
+                            self.__tela_personagem.mostra_mensagem(
+                                "ERRO! O NOVO NÍVEL NÃO PODE SER MENOR"
+                                " OU IGUAL AO NÍVEL ATUAL!")
+                            self.mostra_tela()
                         #atualiza o nível do personagem
                         personagem.nivel = novo_valor
                         #atualiza a variavel que é utilizada ao gerar
@@ -112,7 +114,11 @@ class ControlePersonagem:
     #método que lista todos os personagens existentes, mostrando para o
     # usuário
     def listar_personagens(self):
-        self.__tela_personagem.listar_personagens(self.__personagens)
+        if self.__personagens:
+            self.__tela_personagem.listar_personagens(self.__personagens)
+        else:
+            self.__tela_personagem.mostra_mensagem(
+                "ERRO! NÃO HÁ PERSONAGENS CADASTRADOS!")
 
     #método que gera um relatório para um determinado personagem,
     # informando quantos níveis ele subiu, quais itens ele adquiriu e
@@ -120,6 +126,8 @@ class ControlePersonagem:
     def gerar_relatorio(self):
         #verifica se a lista de personagens está vazia
         if self.__personagens:
+            #lista os personagens cadastrados
+            self.listar_personagens()
             #faz o usuário escolher um personagem para gerar o relatório
             personagem_relatorio = \
                 self.__tela_personagem.pega_nome_personagem()
@@ -148,6 +156,7 @@ class ControlePersonagem:
         else:
             self.__tela_personagem.mostra_mensagem(
                 "ERRO! NÃO HÁ PERSONAGENS CADASTRADOS!")
+
 
     #método que acessa o inventário de um personagem
     def acessar_inventario(self):
@@ -189,3 +198,4 @@ class ControlePersonagem:
                   }
         while True:
             opcoes[self.__tela_personagem.tela_opcoes()]()
+            self.__tela_personagem.mostra_mensagem('')

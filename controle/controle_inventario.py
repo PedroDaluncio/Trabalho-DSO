@@ -205,7 +205,6 @@ class ControleInventario:
             tipo_item[opcao_tipo_item]]
         #lista os itens contidos dentro de itens
         self.__tela_inventario.listar_itens(itens)
-        self.__tela_inventario.mostra_mensagem('')
 
     #lista todos os itens do personagem
     def listar_inventario(self):
