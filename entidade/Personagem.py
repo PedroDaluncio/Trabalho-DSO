@@ -2,13 +2,18 @@
 
 class Personagem():
     def __init__(self, nome, nivel, classe, raca):
+        #nome so personagem
         self.__nome = nome
+        #nível do personagem
         self.__nivel = nivel
+        #classe do personagem
         self.__classe = classe
+        #raça do personagem
         self.__raca = raca
+        #quantos níveis o personagem ganhou, sendo utilizado no relatório
         self.__qt_niveis_adquiridos = 0
-        self.__personagem_no_inventario = ''
 
+    #getters e setters:
     @property
     def nome(self):
         return self.__nome
@@ -48,11 +53,3 @@ class Personagem():
     @qt_niveis_adquiridos.setter
     def qt_niveis_adquiridos(self, qt_niveis):
         self.__qt_niveis_adquiridos = qt_niveis
-
-    @property
-    def personagem_no_inventario(self):
-        return self.__personagem_no_inventario
-
-    @personagem_no_inventario.setter
-    def personagem_no_inventario(self, nome):
-        self.__personagem_no_inventario = nome

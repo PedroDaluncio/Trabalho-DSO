@@ -2,11 +2,19 @@
 
 class Inventario:
     def __init__(self):
+        #é o inventário de itens, onde cada personagem possui o seu
+        #próprio inventário
         self.__espaco_interno = {}
+        #dicionário que contém todos os itens obtidos por um determinado
+        #personagem
         self.__itens_adquiridos = {}
+        #dícionario que contém todos os itens perdidos de um determinado
+        #personagem
         self.__itens_perdidos = {}
+        #personagem que está atualmente no inventário
         self.__personagem = ''
 
+    #getters e setters:
     @property
     def personagem(self):
         return self.__personagem
@@ -30,11 +38,9 @@ class Inventario:
 
     @itens_adquiridos.setter
     def itens_adquiridos(self, item):
-        if self.__personagem in self.__itens_adquiridos and self.__itens_adquiridos[self.__personagem]:
-            self.__itens_adquiridos[self.__personagem].append(item)
-        else:
-            self.__itens_adquiridos[self.__personagem] = []
-            self.__itens_adquiridos[self.__personagem].append(item)
+        #adiciona o item na lista de itens adquiridos para o personagem
+        #que está atualmente no invetário
+        self.__itens_adquiridos[self.__personagem].append(item)
 
     @property
     def itens_perdidos(self):
@@ -42,8 +48,13 @@ class Inventario:
 
     @itens_perdidos.setter
     def itens_perdidos(self, item):
+        #adiciona o item na lista de itens perdidos para o personagem
+        #que está atualmente no invetário
         self.__itens_perdidos[self.__personagem].append(item)
 
+    #cria o inventário para o personagem que está atualmente no
+    #inventário, adicionando no espaço interno. Além disso, cria a lista
+    #de itens adquiridos e itens perdidos para o personagem
     def cria_inventario(self, personagem, inventario):
         self.__espaco_interno[personagem] = inventario
         self.__itens_adquiridos[personagem] = []
