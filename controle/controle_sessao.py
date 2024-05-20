@@ -55,11 +55,36 @@ class ControleSessao:
         self.__tela_sessao.mostrar_mensagem("Selecione uma sessão para editar inserindo sua data correspondente")
         self.listar_sessoes()
         dados = self.__tela_sessao.obter_data_sessao()
-        sessao_editada = self.busca_sessao_por_data(dados["ano"],dados["mes"],dados["dia"],dados["hora"])
+        sessao_editada = self.busca_sessao_por_data(dados["ano"], dados["mes"], dados["dia"], dados["hora"])
+
         if sessao_editada is not None:
-            dados = self.__tela_sessao.obter_data_sessao()
-            nova_data = datetime.datetime(dados["ano"], dados["ano"], dados["ano"], dados["ano"])
-            sessao_editada.data = nova_data
+            escolha = self.__tela_sessao.selecionar_edicao()
+
+            if escolha == 1:
+                dados = self.__tela_sessao.obter_data_sessao()
+                nova_data = datetime.datetime(dados["ano"], dados["ano"], dados["ano"], dados["ano"])
+                sessao_editada.data = nova_data
+
+            elif escolha == 2:
+                self.__tela_sessao.mostrar_mensagem("Digite o nome do jogador")
+                nome = input()
+                jogador = self.__controle_principal.controle_jogador.busca_jogador_por_nome(nome)
+                if jogador is not None:
+                    operacao = self.__tela_sessao.selecionar_operacao()
+                    if operacao == 1:
+                        sessao_editada.lista_de_jogadores.append(jogador)
+                    elif operacao == 2:
+                        sessao_editada.lista_de_jogadores.remove(jogador)
+                    else:
+                        self.__tela_sessao.mostrar_mensagem("Digite o nome do jogador")
+                        self.__controle_principal.controle_jogador.busca_jogador_por_nome(nome)
+                else:
+                    self.__tela_sessao.mostrar_mensagem("Jogador não faz parte da sessão")
+
+            elif escolha == 3:
+                ''''''
+            else:
+                self.__tela_sessao.selecionar_edicao()
         else:
             self.__tela_sessao.mostrar_mensagem("Sessão não cadastrada")
 
@@ -72,3 +97,18 @@ class ControleSessao:
             self.__lista_registros.remove(sessao_excluida)
         else:
             self.__tela_sessao.mostrar_mensagem("sessão nao cadastrada")
+
+    def retornar(self):
+        self.__controle_principal.abre_tela()
+
+    def mostrar_tela(self):
+        lista_opcoes = {
+            1: self.registrar_sessao(),
+            2: self.editar_sessao(),
+            3: self.listar_sessoes(),
+            4: self.excluir_sessao(),
+            0: self.retornar
+        }
+        tela_ativa = True
+        while tela_ativa:
+            lista_opcoes[self.__tela_sessao.tela_opcoes()]()

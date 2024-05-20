@@ -13,6 +13,23 @@ class TelaSessao:
         opcao = int(input("Escolha uma opção: "))
         return opcao
 
+    def selecionar_edicao(self):
+        print("Escolha o que deseja editar")
+        print("1 - Editar Data")
+        print("2 - Editar Jogadores")
+        print("3 - Editar Personagens")
+        print("0 - Voltar")
+        opcao = int(input("Escolha uma opção: "))
+        return opcao
+
+    def selecionar_operacao(self):
+        print("Escolha o que deseja fazer")
+        print("1 - Adicionar")
+        print("2 - Excluir")
+        print("0 - Voltar")
+        opcao = int(input("Escolha uma opção: "))
+        return opcao
+
     def obter_data_sessao(self):
         print("insira a data da sessão ")
         ano = input("insira o ano: ")
