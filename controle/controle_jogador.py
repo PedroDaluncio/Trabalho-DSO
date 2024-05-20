@@ -73,7 +73,7 @@ class ControleJogador:
             self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
 
     def retornar(self):
-        self.__controle_principal.abre_tela()
+        self.__controle_principal.mostrar_tela()
 
     def mostrar_tela(self):
         lista_opcoes = {
@@ -85,4 +85,6 @@ class ControleJogador:
         }
         tela_ativa = True
         while tela_ativa:
-            lista_opcoes[self.__tela_jogador.tela_opcoes()]()
+            opcao_escolhida = self.__tela_jogador.tela_opcoes()
+            funcao_escolhida = lista_opcoes[int(opcao_escolhida)]
+            funcao_escolhida()

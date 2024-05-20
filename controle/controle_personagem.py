@@ -127,7 +127,7 @@ class ControlePersonagem:
     def retornar(self):
         self.__controle_principal.mostrar_tela()
 
-    def mostra_tela(self):
+    def mostrar_tela(self):
         opcoes = {1: self.adicionar_personagem,
                   2: self.remover_personagem,
                   3: self.listar_personagens,

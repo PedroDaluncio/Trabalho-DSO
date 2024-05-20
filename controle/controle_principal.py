@@ -28,7 +28,7 @@ class ControlePrincipal:
         self.__controle_jogador.mostrar_tela()
 
     def cadastra_personagem(self):
-        self.__controle_personagem.mostra_tela()
+        self.__controle_personagem.mostrar_tela()
 
     def cadastra_sessao(self):
         self.__controle_sessao.mostrar_tela()
@@ -43,7 +43,8 @@ class ControlePrincipal:
             3: self.cadastra_sessao(),
             0: self.encerra_sistema
         }
-        while True:
+        tela_ativa = True
+        while tela_ativa:
             opcao_escolhida = self.__tela_principal.tela_opcoes()
             funcao_escolhida = lista_opcoes[opcao_escolhida]
             funcao_escolhida()

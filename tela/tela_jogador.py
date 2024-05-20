@@ -23,7 +23,7 @@ class TelaJogador:
         while not all(caractere.isalpha() or caractere.isspace() for caractere in nome):
             nome = input("Nome inválido, tente novamente: ")
         idade = input("Idade: ")
-        while not all(caractere.isalpha() or caractere.isspace() for caractere in idade):
+        while not all(caractere.isdigit() or caractere.isspace() for caractere in idade):
             idade = input("Idade inválida, tente novamente: ")
 
         return {"nome": nome, "idade": int(idade)}
