@@ -9,10 +9,10 @@ class TelaPrincipal:
         print("3 - Sessões")
         print("0 - Sair")
 
-        opcao = input("Escolha uma opção")
+        opcao = input("Escolha uma opção: ")
         opcoes_validas = ["1", "2", "3", "0"]
 
         if opcao not in opcoes_validas:
             print("Entrada inválida, tente novamente")
         else:
-            return opcao
+            return int(opcao)

@@ -1,6 +1,3 @@
-from outras_classes.Arremesavel import Arremesavel
-from outras_classes.Consumivel import Consumivel
-from outras_classes.Equipavel import Equipavel
 
 
 class Inventario:
