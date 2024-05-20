@@ -1,3 +1,5 @@
+
+
 class TelaPrincipal:
     def tela_opcoes(self):
         print("------CadastroRPG------")

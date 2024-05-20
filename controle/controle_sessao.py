@@ -18,8 +18,8 @@ class ControleSessao:
         self.__tela_sessao.mostrar_mensagem("Insira os jogadores participantes (insira 0 para terminar)")
         continua = True
         while continua:
-            jogador = self.__controle_principal.controle_jogador.selecionar_jogador()
-            if jogador is not 0:
+            jogador = self.__controle_principal.controle_jogador.selecionar_jogador
+            if jogador != 0:
                 lista_de_jogadores_participantes.append(jogador)
             else:
                 continua = not continua
@@ -29,7 +29,7 @@ class ControleSessao:
         continua = True
         while continua:
             personagem = self.__controle_principal.controle_personagem.selecionar_personagem()
-            if personagem is not 0:
+            if personagem != 0:
                 lista_de_personagens_participantes.append(personagem)
 
         sessao = Sessao(data_sessao, lista_de_jogadores_participantes, lista_de_personagens_participantes)

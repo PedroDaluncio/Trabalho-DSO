@@ -12,6 +12,7 @@ class TelaJogador:
 
         opcao = input("Escolha uma opção: ")
         opcoes_validas = ["1", "2", "3", "4", "0"]
+
         if opcao not in opcoes_validas:
             print("entrada inválida, tente novamente")
         else:

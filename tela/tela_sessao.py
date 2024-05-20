@@ -39,7 +39,7 @@ class TelaSessao:
         dia = input("insira o dia: ")
         mes = input("insira o mes: ")
         hora = input("insira apenas a hora: ")
-        return {"ano": ano, "dia": dia, "mes": mes, "hora": hora}
+        return {"ano": int(ano), "dia": int(dia), "mes": int(mes), "hora": int(hora)}
 
     def mostrar_sessao(self, dados_sessao):
         print("Data da sessão: ", dados_sessao["data"])
