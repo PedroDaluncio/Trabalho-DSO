@@ -13,12 +13,12 @@ class TelaPersonagem:
         print("5 - Acessar Inventário")
         print("6 - Gerar Relatório")
         print("0 - Retornar")
-        opcao = int(input("Escolha a opção: "))
+        opcao = input("Escolha a opção: ")
         #força o usuário a digitar novamente uma opção caso ele insira
         #uma opção inválida
-        while opcao not in (0, 1, 2, 3, 4, 5, 6):
+        while opcao not in ["0", "1", "2", "3", "4", "5", "6"]:
             opcao = input("Entrada inválida, digite novamente: ")
-        return opcao
+        return int(opcao)
 
     #pergunta ao usuário os dados necessários para criar o personagem
     def pega_dados_personagem(self):

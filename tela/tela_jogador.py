@@ -14,10 +14,9 @@ class TelaJogador:
         opcao = input("Escolha uma opção: ")
         opcoes_validas = ["1", "2", "3", "4", "5", "0"]
 
-        if opcao not in opcoes_validas:
-            print("entrada inválida, tente novamente")
-        else:
-            return opcao
+        while opcao not in opcoes_validas:
+            opcao = input("entrada inválida, tente novamente: ")
+        return int(opcao)
 
     def pega_dados_jogador(self):
         print("----- Dados do Jogador -----")

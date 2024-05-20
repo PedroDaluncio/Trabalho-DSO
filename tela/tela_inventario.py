@@ -12,11 +12,11 @@ class TelaInventario:
         print("4 - Listar Inventário")
         print("5 - Alterar Itens")
         print("0 - Retornar")
-        opcao = int(input("Escolha a opção: "))
+        opcao = input("Escolha a opção: ")
         #faz a verificação se a opção escolhida é valida
-        while opcao < 0 or opcao > 5:
+        while opcao not in ["1", "2", "3", "4", "5", "0"]:
             opcao = input("Entrada inválida, digite novamente: ")
-        return opcao
+        return int(opcao)
 
     #método que faz o usuário escolher um tipo de item
     def escolhe_tipo_item(self):

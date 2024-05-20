@@ -12,7 +12,6 @@ class TelaPrincipal:
         opcao = input("Escolha uma opção: ")
         opcoes_validas = ["1", "2", "3", "0"]
 
-        if opcao not in opcoes_validas:
-            print("Entrada inválida, tente novamente")
-        else:
-            return int(opcao)
+        while opcao not in opcoes_validas:
+            opcao = input("Entrada inválida, tente novamente: ")
+        return int(opcao)

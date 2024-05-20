@@ -141,7 +141,7 @@ class ControleSessao:
             self.__tela_sessao.mostrar_mensagem("sessão nao cadastrada")
 
     def retornar(self):
-        self.__controle_principal.abre_tela()
+        self.__controle_principal.mostrar_tela()
 
     def mostrar_tela(self):
         lista_opcoes = {

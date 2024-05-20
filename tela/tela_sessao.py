@@ -9,8 +9,10 @@ class TelaSessao:
         print("3 - Listar Sessões")
         print("4 - Excluir Sessão")
         print("0 - Voltar")
-        opcao = int(input("Escolha uma opção: "))
-        return opcao
+        opcao = input("Escolha uma opção: ")
+        while opcao not in ["1", "2", "3", "4", "0"]:
+            opcao = input("OPÇÃO INVÁLIDA, TENTE NOVAMENTE: ")
+        return int(opcao)
 
     def selecionar_edicao(self):
         print("Escolha o que deseja editar")
@@ -49,7 +51,7 @@ class TelaSessao:
     def mostrar_sessao(self, dados_sessao):
         print("Data da sessão: ", dados_sessao["data"])
         print("Jogadores participantes", dados_sessao["jogadores"])
-        print("Personagens participantes", dados_sessao["personagens"])
+        print("Personagens participantes", dados_sessao["personagens"].nome)
         print("\n")
 
     def mostrar_mensagem(self, mensagem):
