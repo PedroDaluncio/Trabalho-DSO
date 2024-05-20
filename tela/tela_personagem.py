@@ -108,11 +108,10 @@ class TelaPersonagem:
             for itens_ganhos in relatorio['Itens Adquiridos']:
                 print('ITENS GANHOS:')
                 print(itens_ganhos, end="")
-                # if relatorio['Itens Adquiridos'][-1]:
-                #     print('')
+                if relatorio['Itens Adquiridos'][-1]:
+                    print('')
         else:
             print("O PERSONAGEM NÃO ADQUIRIU NENHUM ITEM NOVO!")
-        print('')
         #verifica se o usuário perdeu algum item
         if relatorio['Itens Perdidos']:
             for itens_perdidos in relatorio['Itens Perdidos']:

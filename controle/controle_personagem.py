@@ -190,6 +190,21 @@ class ControlePersonagem:
                 "ERRO! NÃO HÁ NENHUM PERSONAGEM CADASTRADO,"
                 " LOGO, NÃO É POSSÍVEL ACESSAR O INVENTÁRIO!")
 
+    #método que é usado pelo controle_personagem para cadastrar um
+    #personagem de um jogador
+    def selecionar_personagem(self):
+        if self.__personagens:
+            self.listar_personagens()
+            nome = self.__tela_personagem.pega_nome_personagem()
+            for personagem in self.__personagens:
+                if nome == personagem.nome:
+                    return personagem
+            self.__tela_personagem.mostra_mensagem(
+                "Personagem não existe")
+        else:
+            self.__tela_personagem.mostra_mensagem(
+                "Não há personagens cadastrados")
+
     #volta para o controlador principal
     def retornar(self):
         self.__controle_principal.mostrar_tela()

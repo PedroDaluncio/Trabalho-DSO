@@ -33,13 +33,18 @@ class TelaSessao:
         escolha = input("digite 'sim' parece confirmar: ")
         return escolha
 
+    def pega_nome_jogador(self):
+        nome = input("Insira o nome do jogador: ")
+        return nome
+
     def obter_data_sessao(self):
         print("insira a data da sessão ")
-        ano = input("insira o ano: ")
         dia = input("insira o dia: ")
-        mes = input("insira o mes: ")
+        mes = input("insira o mês(em decimal): ")
+        ano = input("insira o ano: ")
         hora = input("insira apenas a hora: ")
-        return {"ano": int(ano), "dia": int(dia), "mes": int(mes), "hora": int(hora)}
+        return {"ano": int(ano), "dia": int(dia),
+                "mes": int(mes), "hora": int(hora)}
 
     def mostrar_sessao(self, dados_sessao):
         print("Data da sessão: ", dados_sessao["data"])

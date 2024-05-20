@@ -8,10 +8,11 @@ class TelaJogador:
         print("2 - Editar Jogador")
         print("3 - Listar Jogadores")
         print("4 - Excluir Jogador")
+        print("5 - Atribuir Personagem")
         print("0 - Retornar")
 
         opcao = input("Escolha uma opção: ")
-        opcoes_validas = ["1", "2", "3", "4", "0"]
+        opcoes_validas = ["1", "2", "3", "4", "5", "0"]
 
         if opcao not in opcoes_validas:
             print("entrada inválida, tente novamente")

@@ -1,5 +1,4 @@
 from controle.controle_principal import ControlePrincipal
-from controle.controle_principal import ControlePrincipal
 
 
 if __name__ == "__main__":
