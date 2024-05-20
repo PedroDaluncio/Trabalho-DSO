@@ -16,13 +16,16 @@ class ControleSessao:
                                         obter_data["dia"], obter_data["hora"])
 
         lista_de_jogadores_participantes = []
+        self.__controle_principal.controle_jogador.listar_jogadores()
         self.__tela_sessao.mostrar_mensagem("Insira os jogadores participantes (insira 0 para terminar)")
         while True:
             jogador = self.__controle_principal.controle_jogador.selecionar_jogador()
-            if jogador is not None:
-                lista_de_jogadores_participantes.append(jogador)
-            else:
+            if jogador == 0:
                 break
+            elif jogador is not None:
+                lista_de_jogadores_participantes.append(jogador.nome)
+            else:
+                self.__tela_sessao.mostrar_mensagem("Jogador não cadastrado, tente novamente")
 
         lista_de_personagens_participantes = []
         self.__tela_sessao.mostrar_mensagem("Insira os personagens "
@@ -30,12 +33,15 @@ class ControleSessao:
                                             "(insira 0 para terminar)")
         while True:
             personagem = self.__controle_principal.controle_personagem.selecionar_personagem()
-            if personagem is not None:
-                lista_de_personagens_participantes.append(personagem)
-            else:
+            if personagem == 0:
                 break
+            elif personagem is not None:
+                lista_de_personagens_participantes.append(personagem.nome)
+            else:
+                self.__tela_sessao.mostrar_mensagem("")
+
         if lista_de_jogadores_participantes and \
-            lista_de_personagens_participantes:
+                lista_de_personagens_participantes:
             sessao = Sessao(data_sessao, lista_de_jogadores_participantes,
                             lista_de_personagens_participantes)
             self.__lista_registros.append(sessao)
@@ -84,7 +90,7 @@ class ControleSessao:
 
                 elif escolha == 2:
                     nome = self.__tela_sessao.pega_nome_jogador()
-                    jogador = self.__controle_principal.controle_jogador.\
+                    jogador = self.__controle_principal.controle_jogador. \
                         busca_jogador_por_nome(nome)
                     if jogador is not None:
                         operacao = self.__tela_sessao.selecionar_operacao()
@@ -99,7 +105,7 @@ class ControleSessao:
                         self.__tela_sessao.mostrar_mensagem("Jogador não faz parte da sessão")
 
                 elif escolha == 3:
-                    personagem = self.__controle_principal.\
+                    personagem = self.__controle_principal. \
                         controle_personagem.selecionar_personagem()
                     if personagem in sessao_editada.personagens_participantes:
                         self.__tela_sessao.mostrar_sessao(
@@ -127,7 +133,7 @@ class ControleSessao:
             self.listar_sessoes()
             dados = self.__tela_sessao.obter_data_sessao()
             sessao_excluida = self.busca_sessao_por_data(dados["ano"], dados["mes"],
-                                                        dados["dia"], dados["hora"])
+                                                         dados["dia"], dados["hora"])
             if sessao_excluida is not None:
                 self.__lista_registros.remove(sessao_excluida)
                 self.mostrar_tela()

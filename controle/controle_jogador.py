@@ -13,6 +13,8 @@ class ControleJogador:
         for jogador in self.__lista_de_jogadores:
             if jogador.nome == nome:
                 return jogador
+            elif nome == "0":
+                return 0
             return None
 
     def adicionar_jogador(self):
@@ -34,10 +36,10 @@ class ControleJogador:
                 if personagem.nome not in jogador_selecionado.personagens.keys():
                     jogador_selecionado.personagens[personagem.nome] = personagem
                     self.__tela_jogador.mostrar_mensagem("O personagem "
-                                                        f"{personagem.nome}"
-                                                        " foi cadastrado ao"
-                                                        " jogador "
-                                                        f"{nome_jogador}!")
+                                                         f"{personagem.nome}"
+                                                         " foi cadastrado ao"
+                                                         " jogador "
+                                                         f"{nome_jogador}!")
                 else:
                     self.__tela_jogador.mostrar_mensagem("Personagem ja pertence a este jogador")
         else:
@@ -66,7 +68,9 @@ class ControleJogador:
         if self.__lista_de_jogadores:
             nome_jogador = self.__tela_jogador.seleciona_jogador()
             jogador_selecionado = self.busca_jogador_por_nome(nome_jogador)
-            if jogador_selecionado is not None:
+            if jogador_selecionado == 0:
+                return 0
+            elif jogador_selecionado is not None:
                 return jogador_selecionado
         else:
             self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")

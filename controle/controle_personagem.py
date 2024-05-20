@@ -25,9 +25,9 @@ class ControlePersonagem:
         #cria o personagem usando esses dados e o adiciona na lista de
         #personagens
         self.__personagens.append(self.__personagem(dados["nome"],
-                                                        dados["nivel"],
-                                                        dados["classe"],
-                                                        dados["raça"]))
+                                                    dados["nivel"],
+                                                    dados["classe"],
+                                                    dados["raça"]))
         #cria o inventário do personagem
         self.__controle_inventario.cria_inventario(dados["nome"])
         self.__tela_personagem.mostra_mensagem(
@@ -46,7 +46,7 @@ class ControlePersonagem:
             #pega o nome do personagem que será removido
             personagem_remover = \
                 self.__tela_personagem.remover_personagem()
-            #verifica se o personagem existe na lista de personagens
+            #Verifica se o personagem existe na lista de personagens
             #caso exista, ele é removido. Caso contrário, mostra uma
             #mensagem avisando o usuário que não existe um personagem
             #cadastrado com esse nome
@@ -165,7 +165,6 @@ class ControlePersonagem:
             self.__tela_personagem.mostra_mensagem(
                 "ERRO! NÃO HÁ PERSONAGENS CADASTRADOS!")
 
-
     #método que acessa o inventário de um personagem
     def acessar_inventario(self):
         #verifica se a lista de personagens está vazia
@@ -179,7 +178,7 @@ class ControlePersonagem:
                 if personagem.nome == dono_inventario:
                     #informa o controle_inventario qual personagem que
                     #estará utilizando o inventário
-                    self.__controle_inventario.\
+                    self.__controle_inventario. \
                         atualizar_personagem_inventario(dono_inventario)
                     #abre a tela do inventário
                     self.__controle_inventario.mostra_tela()
@@ -190,7 +189,7 @@ class ControlePersonagem:
                 "ERRO! NÃO HÁ NENHUM PERSONAGEM CADASTRADO,"
                 " LOGO, NÃO É POSSÍVEL ACESSAR O INVENTÁRIO!")
 
-    #método que é usado pelo controle_personagem para cadastrar um
+    #método usado pelo controle_personagem para cadastrar um
     #personagem de um jogador
     def selecionar_personagem(self):
         if self.__personagens:
@@ -199,6 +198,8 @@ class ControlePersonagem:
             for personagem in self.__personagens:
                 if nome == personagem.nome:
                     return personagem
+                elif nome == "0":
+                    return 0
             self.__tela_personagem.mostra_mensagem(
                 "Personagem não existe")
         else:
