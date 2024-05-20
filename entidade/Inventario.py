@@ -1,6 +1,6 @@
 from outras_classes.Arremesavel import Arremesavel
 from outras_classes.Consumivel import Consumivel
-from outras_classes.equipavel import Equipavel
+from outras_classes.Equipavel import Equipavel
 
 
 class Inventario:
@@ -24,7 +24,7 @@ class Inventario:
 
     @espaco_interno.setter
     def espaco_interno(self, parametros):
-        classe , item = parametros
+        classe, item = parametros
         self.__espaco_interno[self.__personagem][classe].append(item)
 
     @property

@@ -4,7 +4,7 @@ from entidade.Personagem import Personagem
 
 
 class ControlePersonagem:
-    def __init__(self, controle_principal = ''):
+    def __init__(self, controle_principal):
         self.__controle_inventario = ControleInventario(self)
         self.__controle_principal = controle_principal
         self.__tela_personagem = TelaPersonagem()
@@ -75,6 +75,15 @@ class ControlePersonagem:
     def listar_personagens(self):
         self.__tela_personagem.listar_personagens(self.__personagens)
 
+    def selecionar_personagem(self):
+        self.listar_personagens()
+        nome = self.__tela_personagem.pega_nome_personagem()
+        for personagem in self.__personagens:
+            if nome == personagem.nome:
+                return personagem
+            else:
+                self.__tela_personagem.mostra_mensagem("Personagem não existe")
+
     def gerar_relatorio(self):
         if self.__personagens:
             personagem_relatorio = self.__tela_personagem.pega_nome_personagem()
@@ -110,13 +119,13 @@ class ControlePersonagem:
         else:
             self.__tela_personagem.mostra_mensagem(
                 "ERRO! NÃO HÁ NENHUM PERSONAGEM CADASTRADO,"
-                    " LOGO, NÃO É POSSÍVEL ACESSAR O INVENTÁRIO!")
+                " LOGO, NÃO É POSSÍVEL ACESSAR O INVENTÁRIO!")
 
     def perga_personagem_no_inventario(self):
         return self.__personagem.personagem_no_inventario
 
     def retornar(self):
-        self.__controle_principal.abre_tela()
+        self.__controle_principal.mostrar_tela()
 
     def mostra_tela(self):
         opcoes = {1: self.adicionar_personagem,

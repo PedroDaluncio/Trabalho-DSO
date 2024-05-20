@@ -2,7 +2,7 @@ from tela.tela_inventario import TelaInventario
 from entidade.Inventario import Inventario
 from outras_classes.Arremesavel import Arremesavel
 from outras_classes.Consumivel import Consumivel
-from outras_classes.equipavel import Equipavel
+from outras_classes.Equipavel import Equipavel
 
 
 class ControleInventario:
@@ -12,7 +12,7 @@ class ControleInventario:
         self.__controle_personagem = controle_personagem
 
     def cria_inventario(self, nome_personagem):
-        self.__entidade_inventario.cria_inventario(nome_personagem , {
+        self.__entidade_inventario.cria_inventario(nome_personagem, {
             Arremesavel: [],
             Consumivel: [],
             Equipavel: [],
@@ -109,7 +109,7 @@ class ControleInventario:
                 for consumivel in inventario[Consumivel]:
                     if consumivel.nome == nome_item:
                         inventario[Consumivel].remove(
-                                consumivel)
+                            consumivel)
                         self.__tela_inventario.mostra_mensagem(
                             f"O item {consumivel.nome} foi deletado com sucesso!")
                         self.__entidade_inventario.itens_perdidos = consumivel.nome
@@ -146,9 +146,9 @@ class ControleInventario:
                           2: "Consumivel",
                           3: "Equipavel"}
         if not itens[Arremesavel] and \
-            itens[Consumivel] and itens[Equipavel]:
-                self.__tela_inventario.mostra_mensagem("ERRO: A LISTA DE ITENS ESTÁ VAZIA!")
-                return
+                itens[Consumivel] and itens[Equipavel]:
+            self.__tela_inventario.mostra_mensagem("ERRO: A LISTA DE ITENS ESTÁ VAZIA!")
+            return
         contador = 1
         while contador <= 3:
             self.__tela_inventario.listar_inventario(

@@ -1,13 +1,11 @@
-from entidade.personagem import Personagem
+from entidade.Personagem import Personagem
 
 
 class Jogador:
-    def __init__(self, nome: str, idade: int, personagem: Personagem):
+    def __init__(self, nome: str, idade: int):
         self.__nome = nome
         self.__idade = idade
         self.__personagens = {}
-        if isinstance(personagem, Personagem):
-            self.__personagens[personagem.nome] = personagem
 
     @property
     def nome(self):

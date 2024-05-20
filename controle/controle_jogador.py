@@ -1,11 +1,12 @@
 from tela.tela_jogador import TelaJogador
-from entidade.jogador import Jogador
+from entidade.Jogador import Jogador
 
 
 class ControleJogador:
     def __init__(self, controle_principal):
         self.__controle_principal = controle_principal
-        self.__tela_jogador = TelaJogador
+        self.__tela_jogador = TelaJogador()
+        self.__jogador = Jogador
         self.__lista_de_jogadores = []
 
     def busca_jogador_por_nome(self, nome: str):
@@ -18,23 +19,24 @@ class ControleJogador:
         dados_jogador = self.__tela_jogador.pega_dados_jogador()
         validacao = self.busca_jogador_por_nome(dados_jogador["nome"])
         if validacao is None:
-            jogador = Jogador(dados_jogador["nome"], dados_jogador["idade"])
+            jogador = self.__jogador(dados_jogador["nome"], dados_jogador["idade"])
             self.__lista_de_jogadores.append(jogador)
         else:
             self.__tela_jogador.mostrar_mensagem("Jogador já cadastrado")
-
-    '''Essa parte fiquei na duvida em como atribuir um personagem ao jogador ou se fazer ao contrário
     
     def atribuir_personagem(self):
         self.listar_jogadores()
         nome_jogador = self.__tela_jogador.seleciona_jogador()
         jogador_selecionado = self.busca_jogador_por_nome(nome_jogador)
         if jogador_selecionado is not None:
-            ...
-        
+            personagem = self.__controle_principal.controle_personagem.selecionar_personagem()
+            if personagem.nome not in jogador_selecionado.personagens.keys():
+                jogador_selecionado.personagens[personagem.nome] = personagem
+            else:
+                self.__tela_jogador.mostrar_mensagem("Personagem ja pertence a este jogador")
         else:
             self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
-    '''
+
     def editar_jogador(self):
         self.listar_jogadores()
         nome_jogador = self.__tela_jogador.seleciona_jogador()
@@ -59,7 +61,6 @@ class ControleJogador:
             return jogador_selecionado
         else:
             self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
-
 
     def excluir_jogador(self):
         self.listar_jogadores()

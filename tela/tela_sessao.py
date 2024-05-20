@@ -1,4 +1,3 @@
-import datetime
 
 
 class TelaSessao:
@@ -30,13 +29,17 @@ class TelaSessao:
         opcao = int(input("Escolha uma opção: "))
         return opcao
 
+    def entrada_sim_ou_nao(self):
+        escolha = input("digite 'sim' parece confirmar: ")
+        return escolha
+
     def obter_data_sessao(self):
         print("insira a data da sessão ")
         ano = input("insira o ano: ")
         dia = input("insira o dia: ")
         mes = input("insira o mes: ")
         hora = input("insira apenas a hora: ")
-        return {"ano": ano, "dia": dia, "mes": mes, "hora":hora}
+        return {"ano": ano, "dia": dia, "mes": mes, "hora": hora}
 
     def mostrar_sessao(self, dados_sessao):
         print("Data da sessão: ", dados_sessao["data"])

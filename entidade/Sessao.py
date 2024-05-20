@@ -1,5 +1,5 @@
-from entidade.jogador import Jogador
-from entidade.personagem import Personagem
+from entidade.Jogador import Jogador
+from entidade.Personagem import Personagem
 import datetime
 
 

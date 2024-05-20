@@ -20,9 +20,13 @@ class TelaJogador:
     def pega_dados_jogador(self):
         print("----- Dados do Jogador -----")
         nome = input("Nome: ")
+        while not all(caractere.isalpha() or caractere.isspace() for caractere in nome):
+            nome = input("Nome inválido, tente novamente: ")
         idade = input("Idade: ")
+        while not all(caractere.isalpha() or caractere.isspace() for caractere in idade):
+            idade = input("Idade inválida, tente novamente: ")
 
-        return {"nome": nome, "idade": idade}
+        return {"nome": nome, "idade": int(idade)}
 
     def mostra_jogadores(self, dados_jogador):
         print("Nome :", dados_jogador["nome"])

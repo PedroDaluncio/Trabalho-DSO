@@ -7,7 +7,7 @@ from entidade.Sessao import Sessao
 class ControleSessao:
     def __init__(self, controle_principal):
         self.__controle_principal = controle_principal
-        self.__tela_sessao = TelaSessao
+        self.__tela_sessao = TelaSessao()
         self.__lista_registros = []
 
     def registrar_sessao(self):
@@ -25,12 +25,13 @@ class ControleSessao:
                 continua = not continua
 
         lista_de_personagens_participantes = []
-        '''
         self.__tela_sessao.mostrar_mensagem("Insira os personagens participantes (insira 0 para terminar)")
         continua = True
         while continua:
             personagem = self.__controle_principal.controle_personagem.selecionar_personagem()
-        '''
+            if personagem is not 0:
+                lista_de_personagens_participantes.append(personagem)
+
         sessao = Sessao(data_sessao, lista_de_jogadores_participantes, lista_de_personagens_participantes)
         self.__lista_registros.append(sessao)
 
@@ -82,7 +83,19 @@ class ControleSessao:
                     self.__tela_sessao.mostrar_mensagem("Jogador não faz parte da sessão")
 
             elif escolha == 3:
-                ''''''
+                personagem = self.__controle_principal.controle_personagem.selecionar_personagem()
+                if personagem in sessao_editada.personagens_participantes:
+                    self.__tela_sessao.mostrar_sessao("Deseja excluir este personagem da sessão?")
+                    if self.__tela_sessao.entrada_sim_ou_nao() == "sim":
+                        sessao_editada.personagens_participante.remove(personagem)
+                    else:
+                        self.__tela_sessao.selecionar_edicao()
+                else:
+                    self.__tela_sessao.mostrar_mensagem("Deseja adicionar este personagem?")
+                    if self.__tela_sessao.entrada_sim_ou_nao() == "sim":
+                        sessao_editada.personagens_participante.append(personagem)
+                    else:
+                        self.__tela_sessao.selecionar_edicao()
             else:
                 self.__tela_sessao.selecionar_edicao()
         else:

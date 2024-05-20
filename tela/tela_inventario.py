@@ -1,6 +1,6 @@
 
 
-class TelaInventario():
+class TelaInventario:
 
     def tela_opcoes(self):
         print("-------- INVENTÁRIO ----------")
