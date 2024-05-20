@@ -26,6 +26,7 @@ class ControleJogador:
         else:
             self.__tela_jogador.mostrar_mensagem("Jogador já cadastrado")
 
+    #Método que atribui um personagem a um jogador, é possível atribuir mais de um.
     def atribuir_personagem(self):
         if self.__lista_de_jogadores:
             self.listar_jogadores()
@@ -45,6 +46,7 @@ class ControleJogador:
         else:
             self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
 
+    #Método usado para alterar algum dado de algum jogador cadastrado
     def editar_jogador(self):
         if self.__lista_de_jogadores:
             self.listar_jogadores()
@@ -64,6 +66,7 @@ class ControleJogador:
         else:
             self.__tela_jogador.mostrar_mensagem("Não há jogadores cadastrados")
 
+    #Método utilizado pelo controlador da sessão para selecionar jogadores
     def selecionar_jogador(self):
         if self.__lista_de_jogadores:
             nome_jogador = self.__tela_jogador.seleciona_jogador()
