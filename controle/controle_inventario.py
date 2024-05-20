@@ -1,5 +1,4 @@
 from tela.tela_inventario import TelaInventario
-from controle.controle_personagem import ControlePersonagem
 from entidade.Inventario import Inventario
 from outras_classes.Arremesavel import Arremesavel
 from outras_classes.Consumivel import Consumivel
@@ -7,10 +6,18 @@ from outras_classes.equipavel import Equipavel
 
 
 class ControleInventario:
-    def __init__(self):
+    def __init__(self, controle_personagem):
         self.__tela_inventario = TelaInventario()
         self.__entidade_inventario = Inventario()
-        self.__controle_personagem = ControlePersonagem('', self)
+        self.__controle_personagem = controle_personagem
+
+    def cria_inventario(self, nome_personagem):
+        self.__entidade_inventario.cria_inventario(nome_personagem , {
+            Arremesavel: [],
+            Consumivel: [],
+            Equipavel: [],
+        })
+        self.__entidade_inventario.personagem = nome_personagem
 
     def adicionar_item(self):
         tipo_item = self.__tela_inventario.escolhe_tipo_item()
@@ -26,7 +33,7 @@ class ControleInventario:
             )
             self.__tela_inventario.mostra_mensagem(
                 f"O item {atributos_item['nome']} foi adicionado ao inventário!")
-            self.__entidade_inventario.itens_adquiridos(atributos_item['nome'])
+            self.__entidade_inventario.itens_adquiridos = atributos_item['nome']
         elif tipo_item == 2:
             atributos_item = self.__tela_inventario.dados_equipavel()
             self.__entidade_inventario.espaco_interno = Equipavel, Equipavel(
@@ -37,8 +44,8 @@ class ControleInventario:
                 atributos_item["durabilidade"]
             )
             self.__tela_inventario.mostra_mensagem(
-                f"O item {atributos_item['durabilidade']} foi adicionado ao inventário!")
-            self.__entidade_inventario.itens_adquiridos(atributos_item['nome'])
+                f"O item {atributos_item['nome']} foi adicionado ao inventário!")
+            self.__entidade_inventario.itens_adquiridos = atributos_item['nome']
         elif tipo_item == 3:
             atributos_item = self.__tela_inventario.dados_consumivel()
             self.__entidade_inventario.espaco_interno = Consumivel, Consumivel(
@@ -49,8 +56,8 @@ class ControleInventario:
                 atributos_item["duracao"]
             )
             self.__tela_inventario.mostra_mensagem(
-                f"O item {atributos_item['duracao']} foi adicionado ao inventário!")
-            self.__entidade_inventario.itens_adquiridos(atributos_item['nome'])
+                f"O item {atributos_item['nome']} foi adicionado ao inventário!")
+            self.__entidade_inventario.itens_adquiridos = atributos_item['nome']
         elif tipo_item == 0:
             self.mostra_tela()
         else:
@@ -71,7 +78,7 @@ class ControleInventario:
                             arremesavel)
                         self.__tela_inventario.mostra_mensagem(
                             f"O item {arremesavel.nome} foi deletado com sucesso!")
-                        self.__entidade_inventario.itens_perdidos(arremesavel.nome)
+                        self.__entidade_inventario.itens_perdidos = arremesavel.nome
                         return
                 self.__tela_inventario.mostra_mensagem(
                     "Você não possui esse item")
@@ -88,7 +95,7 @@ class ControleInventario:
                             equipavel)
                         self.__tela_inventario.mostra_mensagem(
                             f"O item {equipavel.nome} foi deletado com sucesso!")
-                        self.__entidade_inventario.itens_perdidos(equipavel.nome)
+                        self.__entidade_inventario.itens_perdidos = equipavel.nome
                         return
                 self.__tela_inventario.mostra_mensagem(
                     "Você não possui esse item")
@@ -105,7 +112,7 @@ class ControleInventario:
                                 consumivel)
                         self.__tela_inventario.mostra_mensagem(
                             f"O item {consumivel.nome} foi deletado com sucesso!")
-                        self.__entidade_inventario.itens_perdidos(consumivel.nome)
+                        self.__entidade_inventario.itens_perdidos = consumivel.nome
                         break
                 self.__tela_inventario.mostra_mensagem(
                     "Você não possui esse item")
@@ -122,7 +129,9 @@ class ControleInventario:
     def listar_itens(self):
         opcao_tipo_item = self.__tela_inventario.escolhe_tipo_item()
         tipo_item = {1: Arremesavel, 2: Equipavel, 3: Consumivel}
-        if not self.__entidade_inventario.espaco_interno[tipo_item[opcao_tipo_item]]:
+        if not opcao_tipo_item:
+            return
+        elif not self.__entidade_inventario.espaco_interno[tipo_item[opcao_tipo_item]]:
             self.__tela_inventario.mostra_mensagem("ERRO: A LISTA DE ITENS ESTÁ VAZIA!")
             return
         itens = self.__entidade_inventario.espaco_interno[
@@ -131,16 +140,17 @@ class ControleInventario:
         self.__tela_inventario.mostra_mensagem('')
 
     def listar_inventario(self):
-        tipos_item = {1: Consumivel, 2: Arremesavel, 3: Equipavel}
+        tipos_item = {1: Arremesavel, 2: Consumivel, 3: Equipavel}
         itens = self.__entidade_inventario.espaco_interno
-        str_tipos_item = {1: "Consumivel",
-                          2: "Arremesavel",
+        str_tipos_item = {1: "Arremesavel",
+                          2: "Consumivel",
                           3: "Equipavel"}
-        contador = 1
-        while contador <= 3:
-            if not self.__entidade_inventario.espaco_interno[tipos_item[contador]]:
+        if not itens[Arremesavel] and \
+            itens[Consumivel] and itens[Equipavel]:
                 self.__tela_inventario.mostra_mensagem("ERRO: A LISTA DE ITENS ESTÁ VAZIA!")
                 return
+        contador = 1
+        while contador <= 3:
             self.__tela_inventario.listar_inventario(
                 itens[tipos_item[contador]], str_tipos_item[contador])
             contador += 1
@@ -189,6 +199,9 @@ class ControleInventario:
             "O item foi atualizado com sucesso!")
         self.__tela_inventario.mostra_mensagem('')
 
+    def atualizar_personagem_inventario(self, personagem):
+        self.__entidade_inventario.personagem = personagem
+
     def pega_itens_relatorio(self):
         return [self.__entidade_inventario.itens_adquiridos,
                 self.__entidade_inventario.itens_perdidos]
@@ -202,5 +215,5 @@ class ControleInventario:
                   0: self.__controle_personagem.mostra_tela
                   }
         while True:
-            opcoes[self.__tela_inventario.tela_opcoes()]()
             self.__tela_inventario.mostra_mensagem('')
+            opcoes[self.__tela_inventario.tela_opcoes()]()

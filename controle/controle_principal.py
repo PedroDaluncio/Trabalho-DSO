@@ -1,7 +1,7 @@
+from controle.controle_personagem import ControlePersonagem
 from tela.tela_principal import TelaPrincipal
 from controle.controle_jogador import ControleJogador
 from controle.controle_sessao import ControleSessao
-from controle_personagem import ControlePersonagem
 
 
 class ControlePrincipal:

@@ -49,17 +49,20 @@ class TelaPersonagem:
 
     def listar_personagens(self, lista_personagens):
         for personagem in lista_personagens:
-            print(personagem.nome)
+            if personagem == lista_personagens[-1]:
+                print(personagem.nome, end='')
+            else:
+                print(personagem.nome, end=', ')
+        print('')
 
     def opcoes_atualizacao(self):
         print("-------- OPÇÕES ATUALIZAÇÃO DO PERSONAGEM ----------")
         print("Escolha a opção")
-        print("1 - Mudar Nome")
-        print("2 - Mudar Classe")
-        print("3 - Mudar Nível")
+        print("1 - Mudar Classe")
+        print("2 - Mudar Nível")
         print("0 - Retornar")
         opcao = int(input("Escolha a opção: "))
-        while opcao not in (0, 1, 2, 3):
+        while opcao not in (0, 1, 2):
             opcao = input("Entrada inválida, digite novamente: ")
         return opcao
 
@@ -70,6 +73,26 @@ class TelaPersonagem:
     def pega_dado_atualizacao(self):
         dado = input("Insira o novo valor: ")
         return dado
+
+    def mostra_relatorio(self, relatorio):
+        print("-------- RELATÓRIO ----------")
+        print(f"QUANTIDADE DE NÍVEIS UPADOS: {relatorio['Niveis']}")
+        if relatorio['Itens Adquiridos']:
+            for itens_ganhos in relatorio['Itens Adquiridos']:
+                print('ITENS GANHOS:')
+                print(itens_ganhos, end="")
+                if relatorio['Itens Adquiridos'][-1]:
+                    print('')
+        else:
+            print("O PERSONAGEM NÃO ADQUIRIU NENHUM ITEM NOVO!")
+        if relatorio['Itens Perdidos']:
+            for itens_perdidos in relatorio['Itens Perdidos']:
+                print('ITENS PERDIDOS:')
+                print(itens_perdidos, end="")
+                if relatorio['Itens Perdidos'][-1]:
+                    print('')
+        else:
+            print("O PERSONAGEM NÃO PERDEU NENHUM ITEM!")
 
     def mostra_mensagem(self, mensagem):
         print(mensagem)

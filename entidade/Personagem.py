@@ -7,6 +7,7 @@ class Personagem():
         self.__classe = classe
         self.__raca = raca
         self.__qt_niveis_adquiridos = 0
+        self.__personagem_no_inventario = ''
 
     @property
     def nome(self):
@@ -47,3 +48,11 @@ class Personagem():
     @qt_niveis_adquiridos.setter
     def qt_niveis_adquiridos(self, qt_niveis):
         self.__qt_niveis_adquiridos = qt_niveis
+
+    @property
+    def personagem_no_inventario(self):
+        return self.__personagem_no_inventario
+
+    @personagem_no_inventario.setter
+    def personagem_no_inventario(self, nome):
+        self.__personagem_no_inventario = nome
