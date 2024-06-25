@@ -38,39 +38,29 @@ class ControlePersonagem:
         # verifica se a lista de personagens está vazia, se estiver, avisa
         # o usuário
         if self.__personagens:
-            # lista todos os personagens existentes
-            self.__tela_personagem.mostra_mensagem(
-                '')
-            self.listar_personagens()
             # pega o nome do personagem que será removido
             personagem_remover = \
-                self.__tela_personagem.remover_personagem()
+                self.__tela_personagem.remover_personagem(list(self.__personagens.keys()))
             # Verifica se o personagem existe na lista de personagens
             # caso exista, ele é removido. Caso contrário, mostra uma
             # mensagem avisando o usuário que não existe um personagem
             # cadastrado com esse nome
-            if self.__personagens[personagem_remover]:
-                self.__personagens.pop(personagem_remover)
-                self.__tela_personagem.mostra_mensagem(
-                    f"O personagem {personagem_remover}"
-                    " foi excluído com sucesso!")
-                return
+            self.__personagens.pop(personagem_remover)
             self.__tela_personagem.mostra_mensagem(
-                "O personagem não existe!")
-        else:
-            self.__tela_personagem.mostra_mensagem(
-                "ERRO! NÃO HÁ NENHUM PERSONAGEM CADASTRADO")
+                f"O personagem {personagem_remover}"
+                " foi excluído com sucesso!")
+            return
+        self.__tela_personagem.mostra_mensagem(
+            "ERRO! NÃO HÁ NENHUM PERSONAGEM CADASTRADO")
 
     # método que irá atualizar a classe ou o nível de um personagem
     def atualizar_personagem(self):
         # verifica se a lista de personagens está vazia, se estiver, avisa
         # o usuário
         if self.__personagens:
-            # lista todos os personagens cadastrados
-            self.listar_personagens()
             # pega o nome do personagem que será atualizado
             personagem_atualizar = \
-                self.__tela_personagem.pega_nome_personagem()
+                self.__tela_personagem.pega_nome_personagem(list(self.__personagens.keys()))
             # percorre a lista de personagens verificando se existe um
             # personagem com o nome informado pelo usuário
             if self.__personagens[personagem_atualizar]:
@@ -121,10 +111,7 @@ class ControlePersonagem:
     # usuário
     def listar_personagens(self):
         if self.__personagens:
-            self.__tela_personagem.mostra_mensagem("PERSONAGENS ATUALMENTE CADASTRADOS:")
-            for personagem in self.__personagens.values():
-                self.__tela_personagem.listar_personagens(personagem.nome)
-            self.__tela_personagem.mostra_mensagem('')
+            self.__tela_personagem.listar_personagens(list(self.__personagens.keys()))
         else:
             self.__tela_personagem.mostra_mensagem(
                 "ERRO! NÃO HÁ PERSONAGENS CADASTRADOS!")
@@ -225,4 +212,3 @@ class ControlePersonagem:
                   }
         while True:
             opcoes[self.__tela_personagem.tela_opcoes()]()
-            self.__tela_personagem.mostra_mensagem('')
