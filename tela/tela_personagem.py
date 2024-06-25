@@ -57,16 +57,8 @@ class TelaPersonagem:
         return nome_personagem
 
     #mostra todos os personagens existentes
-    def listar_personagens(self, lista_personagens):
-        print("PERSONAGENS ATUALMENTE CADASTRADOS:")
-        for personagem in lista_personagens:
-            #faz uma verificação para inserir ou não a vírgula após o
-            # nome do personagem
-            if personagem == lista_personagens[-1]:
-                print(personagem.nome, end='')
-            else:
-                print(personagem.nome, end=', ')
-        print('')
+    def listar_personagens(self, personagem):
+        print(personagem, end=",")
 
     #faz o usuário escolher um atributo do personagem para atualizar
     def opcoes_atualizacao(self):

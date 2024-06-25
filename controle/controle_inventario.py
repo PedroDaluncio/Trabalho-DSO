@@ -10,14 +10,16 @@ class ControleInventario:
         self.__tela_inventario = TelaInventario()
         self.__entidade_inventario = Inventario()
         self.__controle_personagem = controle_personagem
+        self.__personagem_no_inventario = ''
 
     #método que irá criar o inventário para um personagem
-    def cria_inventario(self, nome_personagem):
-        self.__entidade_inventario.cria_inventario(nome_personagem, {
+    def cria_inventario(self):
+        self.__entidade_inventario.cria_inventario({
             Arremesavel: [],
             Consumivel: [],
             Equipavel: [],
         })
+        return self.__entidade_inventario.espaco_interno
 
     #método que adicionara itens em um inventário
     def adicionar_item(self):
@@ -25,13 +27,13 @@ class ControleInventario:
         #faz ele escolher entre Arremesavel, Consumivel e Equipavel
         tipo_item = self.__tela_inventario.escolhe_tipo_item()
         #verifica se será adicionado um arremesavel
+        personagem = self.__controle_personagem.retorna_personagem(self.__personagem_no_inventario)
         if tipo_item == 1:
             #pega os dados do item
             atributos_item = self.__tela_inventario.dados_arremesavel()
             #chama o setter do espaco_interno e passa a classe Arremesavel
             # e uma instância dela como parâmetros
-            self.__entidade_inventario.espaco_interno = \
-                Arremesavel, Arremesavel(
+            personagem.inventario = Arremesavel, Arremesavel(
                 atributos_item["nome"],
                 atributos_item["valor"],
                 atributos_item["efeito"],
@@ -42,7 +44,7 @@ class ControleInventario:
                 f"O item {atributos_item['nome']}"
                 " foi adicionado ao inventário!")
             #adiciona o item na lista de itens adquiridos
-            self.__entidade_inventario.itens_adquiridos = \
+            personagem.itens_adquiridos = \
                 atributos_item['nome']
         #verifica se será adicionado um equipavel
         elif tipo_item == 2:
@@ -50,7 +52,7 @@ class ControleInventario:
             atributos_item = self.__tela_inventario.dados_equipavel()
             #chama o setter do espaco_interno e passa a classe Equipavel
             # e uma instância dela como parâmetros
-            self.__entidade_inventario.espaco_interno = \
+            personagem.inventario = \
                 Equipavel, Equipavel(
                 atributos_item["nome"],
                 atributos_item["valor"],
@@ -62,13 +64,13 @@ class ControleInventario:
                 f"O item {atributos_item['nome']}"
                 " foi adicionado ao inventário!")
             #adiciona o item na lista de itens adquiridos
-            self.__entidade_inventario.itens_adquiridos = \
+            personagem.itens_adquiridos = \
                 atributos_item['nome']
         elif tipo_item == 3:
             atributos_item = self.__tela_inventario.dados_consumivel()
             #chama o setter do espaco_interno e passa a classe Consumivel
             # e uma instância dela como parâmetros
-            self.__entidade_inventario.espaco_interno = \
+            personagem.inventario = \
                 Consumivel, Consumivel(
                 atributos_item["nome"],
                 atributos_item["valor"],
@@ -80,7 +82,7 @@ class ControleInventario:
                 f"O item {atributos_item['nome']}"
                 " foi adicionado ao inventário!")
             #adiciona o item na lista de itens adquiridos
-            self.__entidade_inventario.itens_adquiridos = \
+            personagem.itens_adquiridos = \
                 atributos_item['nome']
         #verifica se o usuário quer voltar para a tela do inventário
         elif tipo_item == 0:
@@ -92,11 +94,12 @@ class ControleInventario:
 
     #método que irá remover um item
     def remover_item(self):
+        personagem = self.__controle_personagem.retorna_personagem(self.__personagem_no_inventario)
         #faz o usuário escolher um tipo de item
         opcao_tipo_item = self.__tela_inventario.escolhe_tipo_item()
         #variável que é o espaço interno, foi feita dessa maneira para
         #economizar linhas
-        inventario = self.__entidade_inventario.espaco_interno
+        inventario = personagem.inventario
         #verifica se o usuário escolheu um item do tipo Arremesavel
         if opcao_tipo_item == 1:
             #verifica se a lista de item está vazia
@@ -186,6 +189,7 @@ class ControleInventario:
 
     #lista todos os itens de um determinado tipo
     def listar_itens(self):
+        personagem = self.__controle_personagem.retorna_personagem(self.__personagem_no_inventario)
         #escolhe que tipo de item será listado
         opcao_tipo_item = self.__tela_inventario.escolhe_tipo_item()
         #dicionário contendo os tipos de itens
@@ -195,24 +199,25 @@ class ControleInventario:
         if not opcao_tipo_item:
             self.mostra_tela()
         #verifica se a lista de itens está vazia
-        elif not self.__entidade_inventario.espaco_interno[
+        elif not personagem.inventario[
             tipo_item[opcao_tipo_item]]:
             self.__tela_inventario.mostra_mensagem(
                 "ERRO: A LISTA DE ITENS ESTÁ VAZIA!")
             self.mostra_tela()
         #seleciona a lista de itens que será mostrada
-        itens = self.__entidade_inventario.espaco_interno[
+        itens = personagem.inventario[
             tipo_item[opcao_tipo_item]]
         #lista os itens contidos dentro de itens
         self.__tela_inventario.listar_itens(itens)
 
     #lista todos os itens do personagem
     def listar_inventario(self):
+        personagem = self.__controle_personagem.retorna_personagem(self.__personagem_no_inventario)
         #dicionário contendo os tipos de item
         tipos_item = {1: Arremesavel, 2: Consumivel, 3: Equipavel}
         #seleciona o inventário. Foi feito dessa maneira para economizar
         #espaço
-        itens = self.__entidade_inventario.espaco_interno
+        itens = personagem.inventario
         #Dicionário contendo os tipos de item versão string
         str_tipos_item = {1: "Arremesavel",
                           2: "Consumivel",
@@ -233,6 +238,7 @@ class ControleInventario:
 
     #método que irá atualizar um item
     def atualizar_item(self):
+        personagem = self.__controle_personagem.retorna_personagem(self.__personagem_no_inventario)
         #faz o usuário escolher qual tipo de item será atualizado
         opcao_tipo_item = self.__tela_inventario.escolhe_tipo_item()
         #verifica se ele quer voltar para a tela do inventário
@@ -242,7 +248,7 @@ class ControleInventario:
         tipo_item = {1: Arremesavel, 2: Equipavel, 3: Consumivel}
         #seleciona os itens de um determinado tipo que estão cadastrados
         #no inventário
-        inventario_tipo_item = self.__entidade_inventario.espaco_interno[
+        inventario_tipo_item = personagem.inventario[
             tipo_item[opcao_tipo_item]]
         #verifica se o inventário está vazio
         if inventario_tipo_item:
@@ -292,12 +298,7 @@ class ControleInventario:
 
     #método que muda qual personagem está acessando o inventário
     def atualizar_personagem_inventario(self, personagem):
-        self.__entidade_inventario.personagem = personagem
-
-    #método que retorna os itens necessários para realizar o relatório
-    def pega_itens_relatorio(self):
-        return [self.__entidade_inventario.itens_adquiridos,
-                self.__entidade_inventario.itens_perdidos]
+        self.__personagem_no_inventario = personagem
 
     #método que mostra as opções do inventário para o usuário
     def mostra_tela(self):
@@ -307,7 +308,8 @@ class ControleInventario:
                   4: self.listar_inventario,
                   5: self.atualizar_item,
                   0: self.__controle_personagem.mostra_tela
-                  }
+                }
         while True:
             self.__tela_inventario.mostra_mensagem('')
-            opcoes[self.__tela_inventario.tela_opcoes()]()
+            opcao_escolhida = self.__tela_inventario.tela_opcoes()
+            opcoes[opcao_escolhida]()
