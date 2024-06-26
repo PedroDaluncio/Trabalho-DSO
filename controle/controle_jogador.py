@@ -1,5 +1,6 @@
 from tela.tela_jogador import TelaJogador
 from entidade.Jogador import Jogador
+from persistencia.jogador_dao import JogadorDAO
 
 
 class ControleJogador:
@@ -7,10 +8,10 @@ class ControleJogador:
         self.__controle_principal = controle_principal
         self.__tela_jogador = TelaJogador()
         self.__jogador = Jogador
-        self.__lista_de_jogadores = []
+        self.__jogador_dao = JogadorDAO()
 
     def busca_jogador_por_nome(self, nome: str):
-        for jogador in self.__lista_de_jogadores:
+        for jogador in self.__jogador_dao.get_all():
             if jogador.nome == nome:
                 return jogador
             elif nome == "0":
@@ -22,13 +23,12 @@ class ControleJogador:
         validacao = self.busca_jogador_por_nome(dados_jogador["nome"])
         if validacao is None:
             jogador = self.__jogador(dados_jogador["nome"], dados_jogador["idade"])
-            self.__lista_de_jogadores.append(jogador)
+            self.__jogador_dao.add(jogador)
         else:
             self.__tela_jogador.mostrar_mensagem("Jogador já cadastrado")
 
-    #Método que atribui um personagem a um jogador, é possível atribuir mais de um.
     def atribuir_personagem(self):
-        if self.__lista_de_jogadores:
+        if self.__jogador_dao.get_all():
             self.listar_jogadores()
             nome_jogador = self.__tela_jogador.seleciona_jogador()
             jogador_selecionado = self.busca_jogador_por_nome(nome_jogador)
@@ -46,9 +46,8 @@ class ControleJogador:
         else:
             self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
 
-    #Método usado para alterar algum dado de algum jogador cadastrado
     def editar_jogador(self):
-        if self.__lista_de_jogadores:
+        if self.__jogador_dao.get_all():
             self.listar_jogadores()
             nome_jogador = self.__tela_jogador.seleciona_jogador()
             jogador_editado = self.busca_jogador_por_nome(nome_jogador)
@@ -60,15 +59,14 @@ class ControleJogador:
             self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
 
     def listar_jogadores(self):
-        if self.__lista_de_jogadores:
-            for jogador in self.__lista_de_jogadores:
+        if self.__jogador_dao.get_all():
+            for jogador in self.__jogador_dao.get_all():
                 self.__tela_jogador.mostra_jogadores({"nome": jogador.nome, "idade": jogador.idade})
         else:
             self.__tela_jogador.mostrar_mensagem("Não há jogadores cadastrados")
 
-    #Método utilizado pelo controlador da sessão para selecionar jogadores
     def selecionar_jogador(self):
-        if self.__lista_de_jogadores:
+        if self.__jogador_dao.get_all():
             nome_jogador = self.__tela_jogador.seleciona_jogador()
             jogador_selecionado = self.busca_jogador_por_nome(nome_jogador)
             if jogador_selecionado == 0:
@@ -79,13 +77,16 @@ class ControleJogador:
             self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
 
     def excluir_jogador(self):
-        if self.__lista_de_jogadores:
+        if self.__jogador_dao.get_all():
             self.listar_jogadores()
             nome_jogador = self.__tela_jogador.seleciona_jogador()
             nome = self.busca_jogador_por_nome(nome_jogador)
             if nome is not None:
-                self.__lista_de_jogadores.remove(nome)
-                self.listar_jogadores()
+                if isinstance(nome, Jogador):
+                    self.__jogador_dao.remove(nome)
+                    self.listar_jogadores()
+                else:
+                    self.__tela_jogador.mostrar_mensagem("Entrada inválida")
         else:
             self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
 
