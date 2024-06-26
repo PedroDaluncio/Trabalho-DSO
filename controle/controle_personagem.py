@@ -166,6 +166,7 @@ class ControlePersonagem:
             # estará utilizando o inventário
             self.__controle_inventario. \
                 atualizar_personagem_inventario(dono_inventario)
+            dados_inventario = [[]]
             # abre a tela do inventário
             self.__controle_inventario.mostra_tela()
         else:

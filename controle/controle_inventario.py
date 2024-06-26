@@ -300,6 +300,23 @@ class ControleInventario:
     def atualizar_personagem_inventario(self, personagem):
         self.__personagem_no_inventario = personagem
 
+    def criar_tabela(self):
+        personagem = self.__controle_personagem.retorna_personagem(self.__personagem_no_inventario)
+        linhas = []
+        inventario = personagem.inventario
+        keys_inventario = list(inventario.keys())
+        max_len = max(len(inventario[keys_inventario[0]]), len(
+            inventario[keys_inventario[1]]), len(inventario[keys_inventario[2]]))
+        for i in range(max_len):
+            arremesavel = inventario[keys_inventario[0]][i].nome if i < len(
+                inventario[keys_inventario[0]]) else ''
+            consumivel = inventario[keys_inventario[1]][i].nome if i < len(
+                inventario[keys_inventario[1]]) else ''
+            equipavel = inventario[keys_inventario[2]][i].nome if i < len(
+                inventario[keys_inventario[2]]) else ''
+            linhas.append([arremesavel, consumivel, equipavel])
+        return linhas
+
     #método que mostra as opções do inventário para o usuário
     def mostra_tela(self):
         opcoes = {1: self.adicionar_item,
@@ -310,6 +327,5 @@ class ControleInventario:
                   0: self.__controle_personagem.mostra_tela
                 }
         while True:
-            self.__tela_inventario.mostra_mensagem('')
-            opcao_escolhida = self.__tela_inventario.tela_opcoes()
+            opcao_escolhida = self.__tela_inventario.tela_principal(self.criar_tabela())
             opcoes[opcao_escolhida]()

@@ -1,24 +1,21 @@
+import PySimpleGUI as sg
 
 
 class TelaInventario:
 
-    #método que mostra as opções para o usuário
-    def tela_opcoes(self):
-        print("-------- INVENTÁRIO ----------")
-        print("Escolha a opcao")
-        print("1 - Incluir Item")
-        print("2 - Remover Item")
-        print("3 - Listar Itens")
-        print("4 - Listar Inventário")
-        print("5 - Alterar Itens")
-        print("0 - Retornar")
-        opcao = input("Escolha a opção: ")
-        #faz a verificação se a opção escolhida é valida
-        while opcao not in ["1", "2", "3", "4", "5", "0"]:
-            opcao = input("Entrada inválida, digite novamente: ")
-        return int(opcao)
+    # método que mostra as opções para o usuário
+    def tela_principal(self, inventario):
+        layout = [
+            [sg.Table(values=inventario, headings=['Arremesavel', 'Consumivel', 'Equipavel'], key='-TABLE-',
+                      enable_events=False, display_row_numbers=False, auto_size_columns=True, num_rows=10)],
+            [sg.Button('Adicionar Item', key=1), sg.Button('Editar Item', key=5), sg.Button('Remover Item', key=2)]
+        ]
+        window = sg.Window('INVENTÁRIO').Layout(layout)
+        button, values = window.Read()
+        window.close()
+        return int(button)
 
-    #método que faz o usuário escolher um tipo de item
+    # método que faz o usuário escolher um tipo de item
     def escolhe_tipo_item(self):
         self.mostra_mensagem('')
         print("-------- SELEÇÃO DO TIPO DE ITEM ----------")
@@ -28,13 +25,13 @@ class TelaInventario:
         print("3 - Consumível")
         print("0 - Retornar")
         opcao = int(input("Escolha a opção: "))
-        #verifica se a opção é valida
+        # verifica se a opção é valida
         while opcao not in (0, 1, 2, 3):
             opcao = input("Entrada inválida, digite novamente: ")
         self.mostra_mensagem('')
         return opcao
 
-    #método que pega os dados de itens do tipo consumível
+    # método que pega os dados de itens do tipo consumível
     def dados_consumivel(self):
         print("-------- DADOS CONSUMÍVEL ----------")
         nome = input("Nome: ")
@@ -59,7 +56,7 @@ class TelaInventario:
         return {"nome": nome, "valor": int(valor), "efeito": efeito,
                 "dano": int(dano), "duracao": int(duracao)}
 
-    #método que pega os dados do item do tipo Equipavel
+    # método que pega os dados do item do tipo Equipavel
     def dados_equipavel(self):
         print("-------- DADOS EQUIPAVEL ----------")
         nome = input("Nome: ")
@@ -85,7 +82,7 @@ class TelaInventario:
         return {"nome": nome, "valor": int(valor), "efeito": efeito,
                 "dano": int(dano), "durabilidade": int(durabilidade)}
 
-    #método que pega os dados de item do tipo Arremesavel
+    # método que pega os dados de item do tipo Arremesavel
     def dados_arremesavel(self):
         print("-------- DADOS ARREMESAVEL ----------")
         nome = input("Nome: ")
@@ -110,25 +107,25 @@ class TelaInventario:
         return {"nome": nome, "valor": int(valor), "efeito": efeito,
                 "dano": int(dano), "alcance": int(alcance)}
 
-    #método que pega o nome de um item que será removido
+    # método que pega o nome de um item que será removido
     def remover_item(self):
         nome_item = input(
             "Digite o nome do item que será removido: ")
         return nome_item
 
-    #método que recebe uma lista de itens e mostra ela
+    # método que recebe uma lista de itens e mostra ela
     def listar_itens(self, lista_itens):
         for item in lista_itens:
-            #faz a verificação se é o ultimo item na lista a fim de
+            # faz a verificação se é o ultimo item na lista a fim de
             # arrumar a vírgula e espaço após o item
             if item == lista_itens[-1]:
-                    print(item.nome, end="")
+                print(item.nome, end="")
             else:
                 print(item.nome, end=", ")
         print('')
 
-    #método que lista todos os itens do Inventário
-    #OBS: Ele é chamado três vezes, uma vez para cada tipo de item
+    # método que lista todos os itens do Inventário
+    # OBS: Ele é chamado três vezes, uma vez para cada tipo de item
     def listar_inventario(self, itens, tipo_item):
         print(f"Items do tipo {tipo_item}:")
         if not itens:
@@ -141,7 +138,7 @@ class TelaInventario:
                     print(item.nome, end=", ")
             print('')
 
-    #método que faz o usuário escolher um tipo de item
+    # método que faz o usuário escolher um tipo de item
     def opcoes_atualizacao(self):
         print("-------- ATUALIZAR ITEM ----------")
         print("Escolha o que deseja atualizar")
@@ -154,21 +151,21 @@ class TelaInventario:
         print("7 - Durabilidade")
         print("0 - Voltar")
         opcao = int(input("Digite a sua escolha: "))
-        #verifica se a opção digitada é valida
+        # verifica se a opção digitada é valida
         while opcao < 0 or opcao > 7:
             opcao = int(input("ESCOLHA INVÁLIDA! INSIRA NOVAMENTE: "))
         return opcao
 
-    #método que faz o usuário digitar o novo valor de um atributo do item
+    # método que faz o usuário digitar o novo valor de um atributo do item
     def pega_dado_atualizacao(self):
         dado = input("Insira o novo valor: ")
         return dado
 
-    #método que pega o nome do item que será atualizado
+    # método que pega o nome do item que será atualizado
     def pega_nome_item_atualizar(self):
         nome_item = input("Digite o nome do item que será atualizado: ")
         return nome_item
 
-    #método que mostra uma mensagem ao usuário
+    # método que mostra uma mensagem ao usuário
     def mostra_mensagem(self, mensagem: str):
         print(mensagem)
