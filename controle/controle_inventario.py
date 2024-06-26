@@ -1,7 +1,7 @@
 from tela.tela_inventario import TelaInventario
 from entidade.Inventario import Inventario
-from outras_classes.Arremesavel import Arremesavel
-from outras_classes.Consumivel import Consumivel
+from outras_classes.arremesavel import Arremesavel
+from outras_classes.consumivel import Consumivel
 from outras_classes.equipavel import Equipavel
 
 
