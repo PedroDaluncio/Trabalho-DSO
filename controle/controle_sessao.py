@@ -1,14 +1,14 @@
 import datetime
-
 from tela.tela_sessao import TelaSessao
 from entidade.Sessao import Sessao
+from persistencia.sessao_dao import SessaoDAO
 
 
 class ControleSessao:
     def __init__(self, controle_principal):
         self.__controle_principal = controle_principal
         self.__tela_sessao = TelaSessao()
-        self.__lista_registros = []
+        self.__sessao_dao = SessaoDAO()
 
     def registrar_sessao(self):
         obter_data = self.__tela_sessao.obter_data_sessao()
@@ -44,12 +44,12 @@ class ControleSessao:
                 lista_de_personagens_participantes:
             sessao = Sessao(data_sessao, lista_de_jogadores_participantes,
                             lista_de_personagens_participantes)
-            self.__lista_registros.append(sessao)
+            self.__sessao_dao.add(sessao)
 
     def busca_sessao_por_data(self, ano: int, mes: int, dia: int, hora: int):
-        if self.__lista_registros:
+        if self.__sessao_dao.get_all():
             dados = datetime.datetime(ano, mes, dia, hora)
-            for sessao in self.__lista_registros:
+            for sessao in self.__sessao_dao.get_all():
                 if sessao.data == dados:
                     return sessao
                 else:
@@ -58,8 +58,8 @@ class ControleSessao:
             self.__tela_sessao.mostrar_mensagem("Não há sessões cadastradas!")
 
     def listar_sessoes(self):
-        if self.__lista_registros:
-            for sessao in self.__lista_registros:
+        if self.__sessao_dao.get_all():
+            for sessao in self.__sessao_dao.get_all():
                 self.__tela_sessao.mostrar_sessao({
                     "data": sessao.data,
                     "jogadores": sessao.lista_jogadores,
@@ -70,7 +70,7 @@ class ControleSessao:
             self.__tela_sessao.mostrar_mensagem("Não há sessões cadastradas!")
 
     def editar_sessao(self):
-        if self.__lista_registros:
+        if self.__sessao_dao.get_all():
             self.__tela_sessao.mostrar_mensagem("Selecione uma sessão para"
                                                 " editar inserindo sua "
                                                 "data correspondente")
@@ -126,7 +126,7 @@ class ControleSessao:
             self.__tela_sessao.mostrar_mensagem("Não há sessões cadastradas")
 
     def excluir_sessao(self):
-        if self.__lista_registros:
+        if self.__sessao_dao.get_all():
             self.__tela_sessao.mostrar_mensagem(
                 "Selecione uma sessão para excluir inserindo sua data "
                 "correspondente")
@@ -135,7 +135,7 @@ class ControleSessao:
             sessao_excluida = self.busca_sessao_por_data(dados["ano"], dados["mes"],
                                                          dados["dia"], dados["hora"])
             if sessao_excluida is not None:
-                self.__lista_registros.remove(sessao_excluida)
+                self.__sessao_dao.remove(sessao_excluida)
                 self.mostrar_tela()
         else:
             self.__tela_sessao.mostrar_mensagem("sessão nao cadastrada")
