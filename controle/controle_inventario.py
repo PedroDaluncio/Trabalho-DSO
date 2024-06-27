@@ -93,12 +93,26 @@ class ControleInventario:
         #variável que é o espaço interno, foi feita dessa maneira para
         #economizar linhas
         inventario = personagem.inventario
+        parametro_inventario = {'Arremesavel': [],
+                                'Consumivel': [],
+                                'Equipavel': []}
+        contador = 1
+        for key in list(inventario.keys()):
+            for item in inventario[key]:
+                if contador == 1:
+                    parametro_inventario['Arremesavel'].append(item.nome)
+                elif contador == 2:
+                    parametro_inventario['Consumivel'].append(item.nome)
+                else:
+                    parametro_inventario['Equipavel'].append(item.nome)
+            contador += 1
         #verifica se o usuário escolheu um item do tipo Arremesavel
+        print(parametro_inventario)
         if opcao_tipo_item == 1:
             #verifica se a lista de item está vazia
             if inventario[Arremesavel]:
                 #recebe o nome do item que o usuário quer remover
-                nome_item = self.__tela_inventario.remover_item()
+                nome_item = self.__tela_inventario.pega_nome_item(parametro_inventario)
                 #verifica se o item existe
                 for arremesavel in inventario[Arremesavel]:
                     if arremesavel.nome == nome_item:

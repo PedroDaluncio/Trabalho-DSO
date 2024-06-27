@@ -158,12 +158,6 @@ class TelaInventario:
                 return {"nome": nome, "valor": int(valor), "efeito": efeito,
                         "dano": int(dano), "alcance": int(alcance)}
 
-    # método que pega o nome de um item que será removido
-    def remover_item(self):
-        nome_item = input(
-            "Digite o nome do item que será removido: ")
-        return nome_item
-
     # método que faz o usuário escolher um tipo de item
     def opcoes_atualizacao(self):
         print("-------- ATUALIZAR ITEM ----------")
@@ -188,9 +182,28 @@ class TelaInventario:
         return dado
 
     # método que pega o nome do item que será atualizado
-    def pega_nome_item_atualizar(self):
-        nome_item = input("Digite o nome do item que será atualizado: ")
-        return nome_item
+    def pega_nome_item(self, inventario):
+        layout = [[sg.Text('Escolha um tipo de item:'), sg.Combo(list(inventario.keys()), key='tipo_item', enable_events=True)],
+                  [sg.Text('Itens:'), sg.Combo(values=[], key='itens', size=(20, 2))],
+                  [sg.Submit(), sg.Cancel()]]
+
+        values = ''
+        window = sg.Window('ESCOLHA UM ITEM').Layout(layout)
+
+        while True:
+            event, values = window.read()
+
+            if event == sg.WINDOW_CLOSED or event == 'Submit':
+                break
+
+            # Atualiza os valores da Listbox baseado na chave selecionada
+            if event == 'tipo_item':
+                selected_key = values['tipo_item']
+                window['itens'].update(inventario[selected_key])
+
+        window.close()
+        print(values)
+        return [values['tipo_item'], values['itens']]
 
     # método que mostra uma mensagem ao usuário
     def mostra_mensagem(self, mensagem: str):
