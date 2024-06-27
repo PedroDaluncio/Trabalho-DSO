@@ -88,8 +88,6 @@ class ControleInventario:
     #método que irá remover um item
     def remover_item(self):
         personagem = self.__controle_personagem.retorna_personagem(self.__personagem_no_inventario)
-        #faz o usuário escolher um tipo de item
-        opcao_tipo_item = self.__tela_inventario.escolhe_tipo_item()
         #variável que é o espaço interno, foi feita dessa maneira para
         #economizar linhas
         inventario = personagem.inventario
@@ -107,15 +105,13 @@ class ControleInventario:
                     parametro_inventario['Equipavel'].append(item.nome)
             contador += 1
         #verifica se o usuário escolheu um item do tipo Arremesavel
-        print(parametro_inventario)
-        if opcao_tipo_item == 1:
+        item_excluir = self.__tela_inventario.pega_nome_item(parametro_inventario)
+        if item_excluir[0] == 'Arremesavel':
             #verifica se a lista de item está vazia
             if inventario[Arremesavel]:
-                #recebe o nome do item que o usuário quer remover
-                nome_item = self.__tela_inventario.pega_nome_item(parametro_inventario)
                 #verifica se o item existe
                 for arremesavel in inventario[Arremesavel]:
-                    if arremesavel.nome == nome_item:
+                    if arremesavel.nome == item_excluir[1]:
                         #remove o item da lista
                         inventario[Arremesavel].remove(
                             arremesavel)
@@ -125,20 +121,16 @@ class ControleInventario:
                         self.__entidade_inventario.itens_perdidos = \
                             arremesavel.nome
                         self.mostra_tela()
-                self.__tela_inventario.mostra_mensagem(
-                    "Você não possui esse item")
             else:
                 self.__tela_inventario.mostra_mensagem(
                     "A lista de itens está vazia")
         #verifica se o usuário escolheu um item do tipo Equipavel
-        elif opcao_tipo_item == 2:
+        elif item_excluir[0] == 'Equipavel':
             #verifica se a lista de itens está vazia
             if inventario[Equipavel]:
-                #recebe qual item será removido
-                nome_item = self.__tela_inventario.remover_item()
                 #verifica se o item existe
                 for equipavel in inventario[Equipavel]:
-                    if equipavel.nome == nome_item:
+                    if equipavel.nome == item_excluir[1]:
                         inventario[Equipavel].remove(
                             equipavel)
                         self.__tela_inventario.mostra_mensagem(
@@ -148,19 +140,16 @@ class ControleInventario:
                         self.__entidade_inventario.itens_perdidos = \
                             equipavel.nome
                         self.mostra_tela()
-                self.__tela_inventario.mostra_mensagem(
-                    "Você não possui esse item")
             else:
                 self.__tela_inventario.mostra_mensagem(
                     "A lista de itens está vazia")
         #verifica se o usuário escolheu um item do tipo Consumivel
-        elif opcao_tipo_item == 3:
+        elif item_excluir[0] == 'Consumivel':
             #verifica se a lista de itens está vazia
             if inventario[Consumivel]:
-                nome_item = self.__tela_inventario.remover_item()
                 #verifica se o item existe
                 for consumivel in inventario[Consumivel]:
-                    if consumivel.nome == nome_item:
+                    if consumivel.nome == item_excluir[1]:
                         inventario[Consumivel].remove(
                             consumivel)
                         self.__tela_inventario.mostra_mensagem(
@@ -170,8 +159,6 @@ class ControleInventario:
                         self.__entidade_inventario.itens_perdidos = \
                             consumivel.nome
                         self.mostra_tela()
-                self.__tela_inventario.mostra_mensagem(
-                    "Você não possui esse item")
             else:
                 self.__tela_inventario.mostra_mensagem(
                     "A lista de itens está vazia")
@@ -189,9 +176,17 @@ class ControleInventario:
             tipo_item[opcao_tipo_item]]
         #verifica se o inventário está vazio
         if inventario_tipo_item:
+            parametro_inventario = {}
+            nomes = [item.nome for item in inventario_tipo_item]
+            if opcao_tipo_item == 1:
+                parametro_inventario = {'Arremesavel': nomes}
+            elif opcao_tipo_item == 2:
+                parametro_inventario = {'Equipavel': nomes}
+            else:
+                parametro_inventario = {'Consumivel': nomes}
             #escolhe o item que será atualizado
             item_ser_atualizado = \
-                self.__tela_inventario.pega_nome_item_atualizar()
+                self.__tela_inventario.pega_nome_item(parametro_inventario)[1]
             for item in inventario_tipo_item:
                 if item.nome == item_ser_atualizado:
                     #escolhe qual atributo será atualizado
@@ -220,18 +215,12 @@ class ControleInventario:
                         self.__tela_inventario.mostra_mensagem(
                             "ERRO: O item não possui esse atributo!")
                         self.mostra_tela()
-                elif item == inventario_tipo_item[-1] and \
-                    item.nome != item_ser_atualizado:
-                    self.__tela_inventario.mostra_mensagem(
-                        "ERRO! Você não possui esse item!")
-                    self.mostra_tela()
         else:
             self.__tela_inventario.mostra_mensagem(
                 "ERRO! A lista de itens está vazia!")
             self.mostra_tela()
         self.__tela_inventario.mostra_mensagem(
             "O item foi atualizado com sucesso!")
-        self.__tela_inventario.mostra_mensagem('')
 
     #método que muda qual personagem está acessando o inventário
     def atualizar_personagem_inventario(self, personagem):
