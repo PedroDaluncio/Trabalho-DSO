@@ -43,10 +43,8 @@ class ControlePrincipal:
             3: self.cadastra_sessao,
             0: self.encerra_sistema
         }
-        tela_ativa = True
-        while tela_ativa:
-            opcao_escolhida = self.__tela_principal.tela_opcoes()
-            lista_opcoes[opcao_escolhida]()
+        opcao_escolhida = self.__tela_principal.tela_opcoes()
+        lista_opcoes[opcao_escolhida]()
 
     def inicializa_sistema(self):
         self.mostrar_tela()
