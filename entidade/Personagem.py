@@ -12,6 +12,9 @@ class Personagem():
         self.__raca = raca
         #quantos níveis o personagem ganhou, sendo utilizado no relatório
         self.__qt_niveis_adquiridos = 0
+        self.__inventario = {}
+        self.__itens_adquiridos = []
+        self.__itens_perdidos = []
 
     #getters e setters:
     @property
@@ -53,3 +56,35 @@ class Personagem():
     @qt_niveis_adquiridos.setter
     def qt_niveis_adquiridos(self, qt_niveis):
         self.__qt_niveis_adquiridos = qt_niveis
+
+    @property
+    def inventario(self):
+        return self.__inventario
+
+    @inventario.setter
+    def inventario(self, parametros):
+        classe, item = parametros
+        self.__inventario[classe].append(item)
+
+    @property
+    def itens_adquiridos(self):
+        return self.__itens_adquiridos
+
+    @itens_adquiridos.setter
+    def itens_adquiridos(self, item):
+        #adiciona o item na lista de itens adquiridos para o personagem
+        #que está atualmente no inventário
+        self.__itens_adquiridos.append(item)
+
+    @property
+    def itens_perdidos(self):
+        return self.__itens_perdidos
+
+    @itens_perdidos.setter
+    def itens_perdidos(self, item):
+        #adiciona o item na lista de itens perdidos para o personagem
+        #que está atualmente no invetário
+        self.__itens_perdidos.append(item)
+
+    def cria_inventario(self, inventario):
+        self.__inventario = inventario
