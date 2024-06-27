@@ -1,6 +1,7 @@
 from tela.tela_personagem import TelaPersonagem
 from controle.controle_inventario import ControleInventario
 from entidade.Personagem import Personagem
+from persistencia.personagem_dao import PersonagemDAO
 
 
 class ControlePersonagem:
@@ -9,26 +10,27 @@ class ControlePersonagem:
         self.__controle_principal = controle_principal
         self.__tela_personagem = TelaPersonagem()
         self.__personagem = Personagem
-        self.__personagens = {}
+        self.__personagens = PersonagemDAO()
 
     # método que irá criar o personagem, assim como criar o inventário dele
     def adicionar_personagem(self):
         # pega os dados do personagem
         dados = self.__tela_personagem.pega_dados_personagem()
         # verifica se o personagem já existe
-        if self.__personagens and dados["nome"] in self.__personagens:
+        if self.__personagens.get_all() and dados["nome"] in self.__personagens.get_all():
             self.__tela_personagem.mostra_mensagem(
                 "ERRO! O PERSONAGEM JÁ EXISTE!")
             self.mostra_tela()
         # cria o personagem usando esses dados e o adiciona na lista de
         # personagens
-        self.__personagens[dados["nome"]] = self.__personagem(dados["nome"],
+        self.__personagens.add(self.__personagem(dados["nome"],
                                                               dados["nivel"],
                                                               dados["classe"],
                                                               dados["raça"])
+        )
         # cria o inventário do personagem
-        self.__personagens[dados["nome"]
-                           ].cria_inventario(self.__controle_inventario.cria_inventario())
+        personagem = self.__personagens.get(dados["nome"])
+        personagem.cria_inventario(self.__controle_inventario.cria_inventario())
         self.__tela_personagem.mostra_mensagem(
             f'O personagem {dados["nome"]}'
             ' foi cadastrado com sucesso!')
@@ -37,16 +39,19 @@ class ControlePersonagem:
     def remover_personagem(self):
         # verifica se a lista de personagens está vazia, se estiver, avisa
         # o usuário
-        if self.__personagens:
+        if self.__personagens.get_all():
+            lista_personagens = []
+            for personagem in self.__personagens.get_all():
+                lista_personagens.append(personagem.nome)
             # pega o nome do personagem que será removido
             personagem_remover = \
                 self.__tela_personagem.remover_personagem(
-                    list(self.__personagens.keys()))
+                    lista_personagens)
             # Verifica se o personagem existe na lista de personagens
             # caso exista, ele é removido. Caso contrário, mostra uma
             # mensagem avisando o usuário que não existe um personagem
             # cadastrado com esse nome
-            self.__personagens.pop(personagem_remover)
+            self.__personagens.remove(personagem_remover)
             self.__tela_personagem.mostra_mensagem(
                 f"O personagem {personagem_remover}"
                 " foi excluído com sucesso!")
@@ -58,15 +63,18 @@ class ControlePersonagem:
     def atualizar_personagem(self):
         # verifica se a lista de personagens está vazia, se estiver, avisa
         # o usuário
-        if self.__personagens:
+        if self.__personagens.get_all():
             # pega o nome do personagem que será atualizado
+            lista_personagens = []
+            for personagem in self.__personagens.get_all():
+                lista_personagens.append(personagem.nome)
             personagem_atualizar = \
                 self.__tela_personagem.pega_nome_personagem(
-                    list(self.__personagens.keys()))
+                    lista_personagens)
             # percorre a lista de personagens verificando se existe um
             # personagem com o nome informado pelo usuário
-            if self.__personagens[personagem_atualizar]:
-                personagem = self.__personagens[personagem_atualizar]
+            if self.__personagens.get(personagem_atualizar):
+                personagem = self.__personagens.get(personagem_atualizar)
                 # pega a informação sobre o que o usuário quer
                 # atualizar no personagem
                 valor_atualizar = \
@@ -93,16 +101,16 @@ class ControlePersonagem:
                             "ERRO! O NOVO NÍVEL NÃO PODE SER MENOR"
                             " OU IGUAL AO NÍVEL ATUAL!")
                         self.mostra_tela()
-                        # atualiza o nível do personagem
-                        personagem.nivel = novo_valor
-                        # atualiza a variavel que é utilizada ao gerar
-                        # o relatório, indicando quantos níveis o
-                        # personagem aumentou
-                        personagem.qt_niveis_adquiridos = \
-                            qt_niveis_subidos
-                        self.__tela_personagem.mostra_mensagem(
-                            "O personagem aumentou o seu "
-                            f"nível para {novo_valor}!")
+                    # atualiza o nível do personagem
+                    personagem.nivel = novo_valor
+                    # atualiza a variavel que é utilizada ao gerar
+                    # o relatório, indicando quantos níveis o
+                    # personagem aumentou
+                    personagem.qt_niveis_adquiridos = \
+                        qt_niveis_subidos
+                    self.__tela_personagem.mostra_mensagem(
+                        "O personagem aumentou o seu "
+                        f"nível para {novo_valor}!")
                 return
             self.__tela_personagem.mostra_mensagem(
                 "O personagem não existe!")
@@ -113,9 +121,12 @@ class ControlePersonagem:
     # método que lista todos os personagens existentes, mostrando para o
     # usuário
     def listar_personagens(self):
-        if self.__personagens:
+        if self.__personagens.get_all():
+            lista_personagens = []
+            for personagem in self.__personagens.get_all():
+                lista_personagens.append(personagem.nome)
             self.__tela_personagem.listar_personagens(
-                list(self.__personagens.keys()))
+                lista_personagens)
         else:
             self.__tela_personagem.mostra_mensagem(
                 "ERRO! NÃO HÁ PERSONAGENS CADASTRADOS!")
@@ -125,48 +136,51 @@ class ControlePersonagem:
     # quais itens ele perdeu
     def gerar_relatorio(self):
         # verifica se a lista de personagens está vazia
-        if self.__personagens:
+        if self.__personagens.get_all():
+            lista_personagens = []
+            for personagem in self.__personagens.get_all():
+                lista_personagens.append(personagem.nome)
             # faz o usuário escolher um personagem para gerar o relatório
             personagem_relatorio = \
                 self.__tela_personagem.pega_nome_personagem(
-                    list(self.__personagens.keys()))
-            if self.__personagens[personagem_relatorio]:
-                personagem = self.__personagens[personagem_relatorio]
-                # pega os itens que o personagem informado ganhou e
-                # perdeu
-                novos_itens = \
-                    [self.__personagens[personagem_relatorio].itens_adquiridos,
-                     self.__personagens[personagem_relatorio].itens_perdidos]
-                # pega quantos níveis o personagem aumentou
-                niveis_adquiridos = personagem.qt_niveis_adquiridos
-                # define os itens adquiridos
-                itens_adquiridos = novos_itens[0]
-                # define os itens perdidos
-                itens_perdidos = novos_itens[1]
-                # passa os parâmetros para a tela fazer o relatório
-                self.__tela_personagem.mostra_relatorio({
-                    'Niveis': niveis_adquiridos,
-                    'Itens Adquiridos': itens_adquiridos,
-                    'Itens Perdidos': itens_perdidos
-                })
-                return
-        else:
-            self.__tela_personagem.mostra_mensagem(
-                "ERRO! NÃO HÁ PERSONAGENS CADASTRADOS!")
+                    lista_personagens)
+            personagem = self.__personagens.get(personagem_relatorio)
+            # pega os itens que o personagem informado ganhou e
+            # perdeu
+            novos_itens = \
+                [self.__personagens.get(personagem_relatorio).itens_adquiridos,
+                 self.__personagens.get(personagem_relatorio).itens_perdidos]
+            # pega quantos níveis o personagem aumentou
+            niveis_adquiridos = personagem.qt_niveis_adquiridos
+            # define os itens adquiridos
+            itens_adquiridos = novos_itens[0]
+            # define os itens perdidos
+            itens_perdidos = novos_itens[1]
+            # passa os parâmetros para a tela fazer o relatório
+            self.__tela_personagem.mostra_relatorio({
+                'Niveis': niveis_adquiridos,
+                'Itens Adquiridos': itens_adquiridos,
+                'Itens Perdidos': itens_perdidos
+            })
+            return
+        self.__tela_personagem.mostra_mensagem(
+            "ERRO! NÃO HÁ PERSONAGENS CADASTRADOS!")
 
     # método que acessa o inventário de um personagem
     def acessar_inventario(self):
         # verifica se a lista de personagens está vazia
-        if self.__personagens:
+        if self.__personagens.get_all():
+            lista_personagens = []
+            for personagem in self.__personagens.get_all():
+                lista_personagens.append(personagem.nome)
             # pega o nome do personagem que será acessado o inventário
             dono_inventario = \
                 self.__tela_personagem.pega_nome_personagem(
-                    list(self.__personagens.keys()))
+                    lista_personagens)
             # informa o controle_inventario qual personagem que
             # estará utilizando o inventário
             self.__controle_inventario. \
                 atualizar_personagem_inventario(dono_inventario)
-            dados_inventario = [[]]
             # abre a tela do inventário
             self.__controle_inventario.mostra_tela()
         else:
@@ -177,15 +191,18 @@ class ControlePersonagem:
     # método usado pelo controle_personagem para cadastrar um
     # personagem de um jogador
     def selecionar_personagem(self):
-        if self.__personagens:
+        if self.__personagens.get_all():
+            lista_personagens = []
+            for personagem in self.__personagens.get_all():
+                lista_personagens.append(personagem.nome)
             nome = self.__tela_personagem.pega_nome_personagem(
-                list(self.__personagens.keys()))
-            return self.__personagens[nome]
+                lista_personagens)
+            return self.__personagens.get(nome)
         self.__tela_personagem.mostra_mensagem(
             "Não há personagens cadastrados")
 
     def retorna_personagem(self, personagem):
-        return self.__personagens[personagem]
+        return self.__personagens.get(personagem)
 
     # volta para o controlador principal
     def retornar(self):
