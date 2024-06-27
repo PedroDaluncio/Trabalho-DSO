@@ -84,13 +84,6 @@ class ControleInventario:
             #adiciona o item na lista de itens adquiridos
             personagem.itens_adquiridos = \
                 atributos_item['nome']
-        #verifica se o usuário quer voltar para a tela do inventário
-        elif tipo_item == 0:
-            self.mostra_tela()
-        else:
-            self.__tela_inventario.mostra_mensagem(
-                "ERRO: Insira um item válido!")
-        self.__tela_inventario.mostra_mensagem('')
 
     #método que irá remover um item
     def remover_item(self):
@@ -104,9 +97,6 @@ class ControleInventario:
         if opcao_tipo_item == 1:
             #verifica se a lista de item está vazia
             if inventario[Arremesavel]:
-                #lista todos os itens do tipo Arremesavel
-                self.__tela_inventario.listar_itens(
-                    inventario[Arremesavel])
                 #recebe o nome do item que o usuário quer remover
                 nome_item = self.__tela_inventario.remover_item()
                 #verifica se o item existe
@@ -130,9 +120,6 @@ class ControleInventario:
         elif opcao_tipo_item == 2:
             #verifica se a lista de itens está vazia
             if inventario[Equipavel]:
-                #lista todos os itens do tipo Equipavel
-                self.__tela_inventario.listar_itens(
-                    inventario[Equipavel])
                 #recebe qual item será removido
                 nome_item = self.__tela_inventario.remover_item()
                 #verifica se o item existe
@@ -156,10 +143,6 @@ class ControleInventario:
         elif opcao_tipo_item == 3:
             #verifica se a lista de itens está vazia
             if inventario[Consumivel]:
-                #lista todos os itens do tipo Consumivel
-                self.__tela_inventario.listar_itens(inventario[
-                    Consumivel])
-                #recebe qual item será removido
                 nome_item = self.__tela_inventario.remover_item()
                 #verifica se o item existe
                 for consumivel in inventario[Consumivel]:
@@ -178,72 +161,12 @@ class ControleInventario:
             else:
                 self.__tela_inventario.mostra_mensagem(
                     "A lista de itens está vazia")
-        #volta para a tela do inventário
-        elif opcao_tipo_item == 0:
-            self.__tela_inventario.mostra_mensagem('')
-            self.mostra_tela()
-        else:
-            self.__tela_inventario.mostra_mensagem(
-                "ERRO: Tipo de item inválido!")
-        self.__tela_inventario.mostra_mensagem('')
-
-    #lista todos os itens de um determinado tipo
-    def listar_itens(self):
-        personagem = self.__controle_personagem.retorna_personagem(self.__personagem_no_inventario)
-        #escolhe que tipo de item será listado
-        opcao_tipo_item = self.__tela_inventario.escolhe_tipo_item()
-        #dicionário contendo os tipos de itens
-        tipo_item = {1: Arremesavel, 2: Equipavel, 3: Consumivel}
-        #verifica se o usuário digitou 0, ou seja, se ele quer
-        # voltar para a tela de itens
-        if not opcao_tipo_item:
-            self.mostra_tela()
-        #verifica se a lista de itens está vazia
-        elif not personagem.inventario[
-            tipo_item[opcao_tipo_item]]:
-            self.__tela_inventario.mostra_mensagem(
-                "ERRO: A LISTA DE ITENS ESTÁ VAZIA!")
-            self.mostra_tela()
-        #seleciona a lista de itens que será mostrada
-        itens = personagem.inventario[
-            tipo_item[opcao_tipo_item]]
-        #lista os itens contidos dentro de itens
-        self.__tela_inventario.listar_itens(itens)
-
-    #lista todos os itens do personagem
-    def listar_inventario(self):
-        personagem = self.__controle_personagem.retorna_personagem(self.__personagem_no_inventario)
-        #dicionário contendo os tipos de item
-        tipos_item = {1: Arremesavel, 2: Consumivel, 3: Equipavel}
-        #seleciona o inventário. Foi feito dessa maneira para economizar
-        #espaço
-        itens = personagem.inventario
-        #Dicionário contendo os tipos de item versão string
-        str_tipos_item = {1: "Arremesavel",
-                          2: "Consumivel",
-                          3: "Equipavel"}
-        #verifica se todas as listas estão vazias
-        if not itens[Arremesavel] and \
-            itens[Consumivel] and itens[Equipavel]:
-                self.__tela_inventario.mostra_mensagem(
-                    "ERRO: A LISTA DE ITENS ESTÁ VAZIA!")
-                self.mostra_tela()
-        contador = 1
-        while contador <= 3:
-            #chama o método na tela para listar os itens
-            self.__tela_inventario.listar_inventario(
-                itens[tipos_item[contador]], str_tipos_item[contador])
-            contador += 1
-        self.__tela_inventario.mostra_mensagem('')
 
     #método que irá atualizar um item
     def atualizar_item(self):
         personagem = self.__controle_personagem.retorna_personagem(self.__personagem_no_inventario)
         #faz o usuário escolher qual tipo de item será atualizado
         opcao_tipo_item = self.__tela_inventario.escolhe_tipo_item()
-        #verifica se ele quer voltar para a tela do inventário
-        if opcao_tipo_item == 0:
-            self.mostra_tela()
         #dicionário contendo os tipos de item
         tipo_item = {1: Arremesavel, 2: Equipavel, 3: Consumivel}
         #seleciona os itens de um determinado tipo que estão cadastrados
@@ -321,9 +244,7 @@ class ControleInventario:
     def mostra_tela(self):
         opcoes = {1: self.adicionar_item,
                   2: self.remover_item,
-                  3: self.listar_itens,
-                  4: self.listar_inventario,
-                  5: self.atualizar_item,
+                  3: self.atualizar_item,
                   0: self.__controle_personagem.mostra_tela
                 }
         while True:
