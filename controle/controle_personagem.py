@@ -67,62 +67,67 @@ class ControlePersonagem:
 
     # método que irá atualizar a classe ou o nível de um personagem
     def atualizar_personagem(self):
-        # verifica se a lista de personagens está vazia, se estiver, avisa
-        # o usuário
-        if self.__personagens.get_all():
-            # pega o nome do personagem que será atualizado
-            lista_personagens = []
-            for personagem in self.__personagens.get_all():
-                lista_personagens.append(personagem.nome)
-            personagem_atualizar = \
-                self.__tela_personagem.pega_nome_personagem(
-                    lista_personagens)
-            # percorre a lista de personagens verificando se existe um
-            # personagem com o nome informado pelo usuário
-            if self.__personagens.get(personagem_atualizar):
-                personagem = self.__personagens.get(personagem_atualizar)
-                # pega a informação sobre o que o usuário quer
-                # atualizar no personagem
-                valor_atualizar = \
-                    self.__tela_personagem.opcoes_atualizacao()
-                # pega o novo valor para o personagem
-                novo_valor = \
-                    self.__tela_personagem.pega_dado_atualizacao(
-                        valor_atualizar)
-                # verifica se o usuário quer alterar a classe do
-                # personagem
-                if valor_atualizar == "classe":
-                    # troca a classe do personagem e avisa o usuário
-                    personagem.classe = novo_valor
-                    self.__tela_personagem.mostra_mensagem(
-                        "A classe do personagem foi"
-                        f" alterada para: {personagem.classe}")
-                # verifica se o personagem quer atualizar o nível do
-                # personagem
-                elif valor_atualizar == "nivel":
-                    # calcula quantos níveis o personagem subiu
-                    qt_niveis_subidos = novo_valor - personagem.nivel
-                    if qt_niveis_subidos <= personagem.nivel:
+        try:
+            # verifica se a lista de personagens está vazia, se estiver, avisa
+            # o usuário
+            if self.__personagens.get_all():
+                # pega o nome do personagem que será atualizado
+                lista_personagens = []
+                for personagem in self.__personagens.get_all():
+                    lista_personagens.append(personagem.nome)
+                personagem_atualizar = \
+                    self.__tela_personagem.pega_nome_personagem(
+                        lista_personagens)
+                # percorre a lista de personagens verificando se existe um
+                # personagem com o nome informado pelo usuário
+                if self.__personagens.get(personagem_atualizar):
+                    personagem = self.__personagens.get(personagem_atualizar)
+                    # pega a informação sobre o que o usuário quer
+                    # atualizar no personagem
+                    valor_atualizar = \
+                        self.__tela_personagem.opcoes_atualizacao()
+                    if valor_atualizar == 'ação interrompida':
+                        raise JanelaFechadaException()
+                    # pega o novo valor para o personagem
+                    novo_valor = \
+                        self.__tela_personagem.pega_dado_atualizacao(
+                            valor_atualizar)
+                    if novo_valor == 'ação interrompida':
+                        raise JanelaFechadaException()
+                    # verifica se o usuário quer alterar a classe do
+                    # personagem
+                    if valor_atualizar == "classe":
+                        # troca a classe do personagem e avisa o usuário
+                        personagem.classe = novo_valor
                         self.__tela_personagem.mostra_mensagem(
-                            "ERRO! O NOVO NÍVEL NÃO PODE SER MENOR"
-                            " OU IGUAL AO NÍVEL ATUAL!")
-                        self.mostra_tela()
-                    # atualiza o nível do personagem
-                    personagem.nivel = novo_valor
-                    # atualiza a variavel que é utilizada ao gerar
-                    # o relatório, indicando quantos níveis o
-                    # personagem aumentou
-                    personagem.qt_niveis_adquiridos = \
-                        qt_niveis_subidos
-                    self.__tela_personagem.mostra_mensagem(
-                        "O personagem aumentou o seu "
-                        f"nível para {novo_valor}!")
-                return
-            self.__tela_personagem.mostra_mensagem(
-                "O personagem não existe!")
-        else:
-            self.__tela_personagem.mostra_mensagem(
-                "Não há nenhum personagem cadastrado")
+                            "A classe do personagem foi"
+                            f" alterada para: {personagem.classe}")
+                    # verifica se o personagem quer atualizar o nível do
+                    # personagem
+                    elif valor_atualizar == "nivel":
+                        # calcula quantos níveis o personagem subiu
+                        qt_niveis_subidos = novo_valor - personagem.nivel
+                        if qt_niveis_subidos <= personagem.nivel:
+                            self.__tela_personagem.mostra_mensagem(
+                                "ERRO! O NOVO NÍVEL NÃO PODE SER MENOR"
+                                " OU IGUAL AO NÍVEL ATUAL!")
+                            self.mostra_tela()
+                        # atualiza o nível do personagem
+                        personagem.nivel = novo_valor
+                        # atualiza a variavel que é utilizada ao gerar
+                        # o relatório, indicando quantos níveis o
+                        # personagem aumentou
+                        personagem.qt_niveis_adquiridos = \
+                            qt_niveis_subidos
+                        self.__tela_personagem.mostra_mensagem(
+                            "O personagem aumentou o seu "
+                            f"nível para {novo_valor}!")
+                    return
+            else:
+                self.__tela_personagem.mostra_mensagem(
+                    "Não há nenhum personagem cadastrado")
+        except JanelaFechadaException:
+            self.mostra_tela()
 
     # método que lista todos os personagens existentes, mostrando para o
     # usuário
@@ -141,72 +146,86 @@ class ControlePersonagem:
     # informando quantos níveis ele subiu, quais itens ele adquiriu e
     # quais itens ele perdeu
     def gerar_relatorio(self):
-        # verifica se a lista de personagens está vazia
-        if self.__personagens.get_all():
-            lista_personagens = []
-            for personagem in self.__personagens.get_all():
-                lista_personagens.append(personagem.nome)
-            # faz o usuário escolher um personagem para gerar o relatório
-            personagem_relatorio = \
-                self.__tela_personagem.pega_nome_personagem(
-                    lista_personagens)
-            personagem = self.__personagens.get(personagem_relatorio)
-            # pega os itens que o personagem informado ganhou e
-            # perdeu
-            novos_itens = \
-                [self.__personagens.get(personagem_relatorio).itens_adquiridos,
-                 self.__personagens.get(personagem_relatorio).itens_perdidos]
-            # pega quantos níveis o personagem aumentou
-            niveis_adquiridos = personagem.qt_niveis_adquiridos
-            # define os itens adquiridos
-            itens_adquiridos = novos_itens[0]
-            # define os itens perdidos
-            itens_perdidos = novos_itens[1]
-            # passa os parâmetros para a tela fazer o relatório
-            self.__tela_personagem.mostra_relatorio({
-                'Niveis': niveis_adquiridos,
-                'Itens Adquiridos': itens_adquiridos,
-                'Itens Perdidos': itens_perdidos
-            })
-            return
-        self.__tela_personagem.mostra_mensagem(
-            "ERRO! NÃO HÁ PERSONAGENS CADASTRADOS!")
+        try:
+            # verifica se a lista de personagens está vazia
+            if self.__personagens.get_all():
+                lista_personagens = []
+                for personagem in self.__personagens.get_all():
+                    lista_personagens.append(personagem.nome)
+                # faz o usuário escolher um personagem para gerar o relatório
+                personagem_relatorio = \
+                    self.__tela_personagem.pega_nome_personagem(
+                        lista_personagens)
+                if personagem_relatorio == 'ação interrompida':
+                    raise JanelaFechadaException()
+                personagem = self.__personagens.get(personagem_relatorio)
+                # pega os itens que o personagem informado ganhou e
+                # perdeu
+                novos_itens = \
+                    [self.__personagens.get(personagem_relatorio).itens_adquiridos,
+                    self.__personagens.get(personagem_relatorio).itens_perdidos]
+                # pega quantos níveis o personagem aumentou
+                niveis_adquiridos = personagem.qt_niveis_adquiridos
+                # define os itens adquiridos
+                itens_adquiridos = novos_itens[0]
+                # define os itens perdidos
+                itens_perdidos = novos_itens[1]
+                # passa os parâmetros para a tela fazer o relatório
+                self.__tela_personagem.mostra_relatorio({
+                    'Niveis': niveis_adquiridos,
+                    'Itens Adquiridos': itens_adquiridos,
+                    'Itens Perdidos': itens_perdidos
+                })
+                self.mostra_tela()
+            self.__tela_personagem.mostra_mensagem(
+                "ERRO! NÃO HÁ PERSONAGENS CADASTRADOS!")
+        except JanelaFechadaException:
+            self.mostra_tela()
 
     # método que acessa o inventário de um personagem
     def acessar_inventario(self):
-        # verifica se a lista de personagens está vazia
-        if self.__personagens.get_all():
-            lista_personagens = []
-            for personagem in self.__personagens.get_all():
-                lista_personagens.append(personagem.nome)
-            # pega o nome do personagem que será acessado o inventário
-            dono_inventario = \
-                self.__tela_personagem.pega_nome_personagem(
-                    lista_personagens)
-            # informa o controle_inventario qual personagem que
-            # estará utilizando o inventário
-            self.__controle_inventario. \
-                atualizar_personagem_inventario(dono_inventario)
-            print(self.retorna_personagem(dono_inventario).inventario)
-            # abre a tela do inventário
-            self.__controle_inventario.mostra_tela()
-        else:
-            self.__tela_personagem.mostra_mensagem(
-                "ERRO! NÃO HÁ NENHUM PERSONAGEM CADASTRADO,"
-                " LOGO, NÃO É POSSÍVEL ACESSAR O INVENTÁRIO!")
+        try:
+            # verifica se a lista de personagens está vazia
+            if self.__personagens.get_all():
+                lista_personagens = []
+                for personagem in self.__personagens.get_all():
+                    lista_personagens.append(personagem.nome)
+                # pega o nome do personagem que será acessado o inventário
+                dono_inventario = \
+                    self.__tela_personagem.pega_nome_personagem(
+                        lista_personagens)
+                if dono_inventario == 'ação interrompida':
+                    raise JanelaFechadaException()
+                # informa o controle_inventario qual personagem que
+                # estará utilizando o inventário
+                self.__controle_inventario. \
+                    atualizar_personagem_inventario(dono_inventario)
+                # abre a tela do inventário
+                self.__controle_inventario.mostra_tela()
+            else:
+                self.__tela_personagem.mostra_mensagem(
+                    "ERRO! NÃO HÁ NENHUM PERSONAGEM CADASTRADO,"
+                    " LOGO, NÃO É POSSÍVEL ACESSAR O INVENTÁRIO!")
+        except JanelaFechadaException:
+            self.mostra_tela()
 
     # método usado pelo controle_personagem para cadastrar um
     # personagem de um jogador
     def selecionar_personagem(self):
-        if self.__personagens.get_all():
-            lista_personagens = []
-            for personagem in self.__personagens.get_all():
-                lista_personagens.append(personagem.nome)
-            nome = self.__tela_personagem.pega_nome_personagem(
-                lista_personagens)
-            return self.__personagens.get(nome)
-        self.__tela_personagem.mostra_mensagem(
-            "Não há personagens cadastrados")
+        try:
+            if self.__personagens.get_all():
+                lista_personagens = []
+                for personagem in self.__personagens.get_all():
+                    lista_personagens.append(personagem.nome)
+                nome = self.__tela_personagem.pega_nome_personagem(
+                    lista_personagens)
+                if nome == 'ação interrompida':
+                    raise JanelaFechadaException()
+                return self.__personagens.get(nome)
+            self.__tela_personagem.mostra_mensagem(
+                "Não há personagens cadastrados")
+        except JanelaFechadaException:
+            self.mostra_tela()
 
     def retorna_personagem(self, personagem):
         return self.__personagens.get(personagem)

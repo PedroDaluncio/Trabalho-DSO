@@ -94,17 +94,21 @@ class TelaPersonagem:
         window = sg.Window('ATUALIZAR PERSONAGEM').Layout(layout)
         button, values = window.Read()
         window.close()
+        if button in (sg.WIN_CLOSED, 'Cancel'):
+                return 'ação interrompida'
         return button
 
     # faz o usuário escolher um personagem
     def pega_nome_personagem(self, lista_personagens):
         layout = [[sg.Text('Personagens cadastrados:')],
                   [sg.Combo(lista_personagens, size=(15,2), key='nome', default_value=lista_personagens[0])],
-                  [sg.OK()]]
+                  [sg.OK(), sg.Cancel()]]
 
         window = sg.Window('PERSONAGENS CADASTRADOS').Layout(layout)
         button, values = window.Read()
         window.close()
+        if button in (sg.WIN_CLOSED, 'Cancel'):
+            return 'ação interrompida'
         return values['nome']
 
     # faz o usuário digitar um novo valor para atualizar o personagem
@@ -117,7 +121,8 @@ class TelaPersonagem:
                 button, values = window.Read()
 
                 if button in (sg.WIN_CLOSED, 'Cancel'):
-                    break
+                    window.close()
+                    return 'ação interrompida'
 
                 if not all(caractere.isalpha() or caractere.isspace()
                         for caractere in values["classe"]) or not values["classe"]:
@@ -133,7 +138,8 @@ class TelaPersonagem:
                 button, values = window.Read()
 
                 if button in (sg.WIN_CLOSED, 'Cancel'):
-                    break
+                    window.close()
+                    return 'ação interrompida'
 
                 if not all(caractere.isdigit() for caractere in values["nivel"]) or values["nivel"] == '':
                     sg.popup_error('O Nível do Personagem deve ser um número!')
@@ -147,12 +153,12 @@ class TelaPersonagem:
         itens_perdidos = ''
         # verifica se o usuário adquiriu algum item
         if relatorio['Itens Adquiridos']:
-            itens_adquiridos = sg.Listbox(relatorio['Itens Adquiridos'], size=(5,7))
+            itens_adquiridos = sg.Listbox(relatorio['Itens Adquiridos'], size=(10,5))
         else:
             itens_adquiridos = sg.Text("O PERSONAGEM NÃO ADQUIRIU NENHUM ITEM NOVO!")
         # verifica se o usuário perdeu algum item
         if relatorio['Itens Perdidos']:
-            itens_perdidos = sg.Listbox(relatorio['Itens Perdidos'], size=(5,7))
+            itens_perdidos = sg.Listbox(relatorio['Itens Perdidos'], size=(10,5))
         else:
             itens_perdidos = sg.Text("O PERSONAGEM NÃO PERDEU NENHUM ITEM!")
 

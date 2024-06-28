@@ -13,6 +13,8 @@ class TelaInventario:
         window = sg.Window('INVENTÁRIO').Layout(layout)
         button, values = window.Read()
         window.close()
+        if button in (sg.WIN_CLOSED, 'Retornar'):
+            return 'ação interrompida'
         return int(button)
 
     # método que faz o usuário escolher um tipo de item
@@ -24,6 +26,8 @@ class TelaInventario:
         window = sg.Window('SELEÇÃO DE TIPO DE ITEM').Layout(layout)
         button, values = window.Read()
         window.close()
+        if button in (sg.WIN_CLOSED, 'Cancel'):
+            return 'ação interrompida'
         return int(button)
 
     # método que pega os dados de itens do tipo consumível
@@ -40,7 +44,8 @@ class TelaInventario:
             button, values = window.Read()
 
             if button in (sg.WIN_CLOSED, 'Cancel'):
-                break
+                window.close()
+                return 'ação interrompida'
 
             nome = values['nome']
             valor = values['valor']
@@ -84,7 +89,8 @@ class TelaInventario:
             button, values = window.Read()
 
             if button in (sg.WIN_CLOSED, 'Cancel'):
-                break
+                window.close()
+                return 'ação interrompida'
 
             nome = values['nome']
             valor = values['valor']
@@ -128,7 +134,8 @@ class TelaInventario:
             button, values = window.Read()
 
             if button in (sg.WIN_CLOSED, 'Cancel'):
-                break
+                window.close()
+                return 'ação interrompida'
 
             nome = values['nome']
             valor = values['valor']
@@ -167,6 +174,8 @@ class TelaInventario:
         window = sg.Window('ATUALIZAR ITEM').Layout(layout)
         button, values = window.Read()
         window.close()
+        if button in (sg.WIN_CLOSED, 'Cancel'):
+            return 'ação interrompida'
         return int(button)
 
     # método que faz o usuário digitar o novo valor de um atributo do item
@@ -175,6 +184,9 @@ class TelaInventario:
                   [sg.Submit(), sg.Cancel()]]
         window = sg.Window('ATUALIZAÇÃO DE ITEM').Layout(layout)
         button, values = window.Read()
+        window.close()
+        if button in (sg.WIN_CLOSED, 'Cancel'):
+            return 'ação interrompida'
         return values['valor']
 
     # método que pega o nome do item que será atualizado
@@ -182,23 +194,24 @@ class TelaInventario:
 
         layout = [[sg.Text('Escolha um tipo de item:'), sg.Combo(list(inventario.keys()), key='tipo_item', enable_events=True)],
                   [sg.Text('Itens:')],
-                  [sg.Combo([], key='itens', size=(15, 2))],
+                  [sg.Combo([], key='itens', size=(20, 10))],
                   [sg.Submit(), sg.Cancel()]]
 
         window = sg.Window('ESCOLHA UM ITEM').Layout(layout)
 
         while True:
-            event, values = window.read()
+            button, values = window.read()
 
-            if event == sg.WINDOW_CLOSED or event == 'Cancel':
-                return
-            if event == 'Submit' and not values['tipo_item']:
+            if button in(sg.WINDOW_CLOSED, 'Cancel'):
+                window.close()
+                return 'ação interrompida'
+            if button == 'Submit' and not values['tipo_item']:
                 self.mostra_mensagem('Escolha um item para remover!')
-            elif event == 'Submit' and values['tipo_item']:
+            elif button == 'Submit' and values['tipo_item']:
                 break
 
             # Atualiza os valores da Listbox baseado na chave selecionada
-            if event == 'tipo_item':
+            if button == 'tipo_item':
                 selected_key = values['tipo_item']
                 window['itens'].update(values=inventario[selected_key])
 
