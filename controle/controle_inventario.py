@@ -84,6 +84,7 @@ class ControleInventario:
             #adiciona o item na lista de itens adquiridos
             personagem.itens_adquiridos = \
                 atributos_item['nome']
+        self.__controle_personagem.atualiza_dao(personagem)
 
     #método que irá remover um item
     def remover_item(self):
@@ -162,6 +163,7 @@ class ControleInventario:
             else:
                 self.__tela_inventario.mostra_mensagem(
                     "A lista de itens está vazia")
+        self.__controle_personagem.atualiza_dao(personagem)
 
     #método que irá atualizar um item
     def atualizar_item(self):
@@ -221,6 +223,7 @@ class ControleInventario:
             self.mostra_tela()
         self.__tela_inventario.mostra_mensagem(
             "O item foi atualizado com sucesso!")
+        self.__controle_personagem.atualiza_dao(personagem)
 
     #método que muda qual personagem está acessando o inventário
     def atualizar_personagem_inventario(self, personagem):

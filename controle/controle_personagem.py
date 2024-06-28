@@ -23,14 +23,9 @@ class ControlePersonagem:
             self.mostra_tela()
         # cria o personagem usando esses dados e o adiciona na lista de
         # personagens
-        self.__personagens.add(self.__personagem(dados["nome"],
-                                                              dados["nivel"],
-                                                              dados["classe"],
-                                                              dados["raça"])
-        )
-        # cria o inventário do personagem
-        personagem = self.__personagens.get(dados["nome"])
+        personagem = self.__personagem(dados["nome"], dados["nivel"], dados["classe"], dados["raça"])
         personagem.cria_inventario(self.__controle_inventario.cria_inventario())
+        self.__personagens.add(personagem)
         self.__tela_personagem.mostra_mensagem(
             f'O personagem {dados["nome"]}'
             ' foi cadastrado com sucesso!')
@@ -181,6 +176,7 @@ class ControlePersonagem:
             # estará utilizando o inventário
             self.__controle_inventario. \
                 atualizar_personagem_inventario(dono_inventario)
+            print(self.retorna_personagem(dono_inventario).inventario)
             # abre a tela do inventário
             self.__controle_inventario.mostra_tela()
         else:
@@ -207,6 +203,9 @@ class ControlePersonagem:
     # volta para o controlador principal
     def retornar(self):
         self.__controle_principal.mostrar_tela()
+
+    def atualiza_dao(self, personagem):
+        self.__personagens.add(personagem)
 
     # controla qual método será utilizado baseado na escolha do usuário
     def mostra_tela(self):
