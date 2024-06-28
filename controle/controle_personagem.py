@@ -2,6 +2,7 @@ from tela.tela_personagem import TelaPersonagem
 from controle.controle_inventario import ControleInventario
 from entidade.Personagem import Personagem
 from persistencia.personagem_dao import PersonagemDAO
+from tratamento_excesoes.excecao_close import JanelaFechadaException
 
 
 class ControlePersonagem:
@@ -14,45 +15,55 @@ class ControlePersonagem:
 
     # método que irá criar o personagem, assim como criar o inventário dele
     def adicionar_personagem(self):
-        # pega os dados do personagem
-        dados = self.__tela_personagem.pega_dados_personagem()
-        # verifica se o personagem já existe
-        if self.__personagens.get_all() and dados["nome"] in self.__personagens.get_all():
+        try:
+            # pega os dados do personagem
+            dados = self.__tela_personagem.pega_dados_personagem()
+            if dados == 'ação interrompida':
+                raise JanelaFechadaException()
+            # verifica se o personagem já existe
+            if self.__personagens.get_all() and (dados["nome"] == personagem.nome for personagem in self.__personagens.get_all()):
+                self.__tela_personagem.mostra_mensagem(
+                    "ERRO! O PERSONAGEM JÁ EXISTE!")
+                self.mostra_tela()
+            # cria o personagem usando esses dados e o adiciona na lista de
+            # personagens
+            personagem = self.__personagem(dados["nome"], dados["nivel"], dados["classe"], dados["raça"])
+            personagem.cria_inventario(self.__controle_inventario.cria_inventario())
+            self.__personagens.add(personagem)
             self.__tela_personagem.mostra_mensagem(
-                "ERRO! O PERSONAGEM JÁ EXISTE!")
+                f'O personagem {dados["nome"]}'
+                ' foi cadastrado com sucesso!')
+        except JanelaFechadaException:
             self.mostra_tela()
-        # cria o personagem usando esses dados e o adiciona na lista de
-        # personagens
-        personagem = self.__personagem(dados["nome"], dados["nivel"], dados["classe"], dados["raça"])
-        personagem.cria_inventario(self.__controle_inventario.cria_inventario())
-        self.__personagens.add(personagem)
-        self.__tela_personagem.mostra_mensagem(
-            f'O personagem {dados["nome"]}'
-            ' foi cadastrado com sucesso!')
 
     # método que remove o personagem
     def remover_personagem(self):
-        # verifica se a lista de personagens está vazia, se estiver, avisa
-        # o usuário
-        if self.__personagens.get_all():
-            lista_personagens = []
-            for personagem in self.__personagens.get_all():
-                lista_personagens.append(personagem.nome)
-            # pega o nome do personagem que será removido
-            personagem_remover = \
-                self.__tela_personagem.remover_personagem(
-                    lista_personagens)
-            # Verifica se o personagem existe na lista de personagens
-            # caso exista, ele é removido. Caso contrário, mostra uma
-            # mensagem avisando o usuário que não existe um personagem
-            # cadastrado com esse nome
-            self.__personagens.remove(personagem_remover)
+        try:
+            # verifica se a lista de personagens está vazia, se estiver, avisa
+            # o usuário
+            if self.__personagens.get_all():
+                lista_personagens = []
+                for personagem in self.__personagens.get_all():
+                    lista_personagens.append(personagem.nome)
+                # pega o nome do personagem que será removido
+                personagem_remover = \
+                    self.__tela_personagem.remover_personagem(
+                        lista_personagens)
+                if personagem_remover == 'ação interrompida':
+                    raise JanelaFechadaException()
+                # Verifica se o personagem existe na lista de personagens
+                # caso exista, ele é removido. Caso contrário, mostra uma
+                # mensagem avisando o usuário que não existe um personagem
+                # cadastrado com esse nome
+                self.__personagens.remove(personagem_remover)
+                self.__tela_personagem.mostra_mensagem(
+                    f"O personagem {personagem_remover}"
+                    " foi excluído com sucesso!")
+                return
             self.__tela_personagem.mostra_mensagem(
-                f"O personagem {personagem_remover}"
-                " foi excluído com sucesso!")
-            return
-        self.__tela_personagem.mostra_mensagem(
-            "ERRO! NÃO HÁ NENHUM PERSONAGEM CADASTRADO")
+                "ERRO! NÃO HÁ NENHUM PERSONAGEM CADASTRADO")
+        except JanelaFechadaException:
+            self.mostra_tela()
 
     # método que irá atualizar a classe ou o nível de um personagem
     def atualizar_personagem(self):
@@ -209,13 +220,20 @@ class ControlePersonagem:
 
     # controla qual método será utilizado baseado na escolha do usuário
     def mostra_tela(self):
-        opcoes = {1: self.adicionar_personagem,
-                  2: self.remover_personagem,
-                  3: self.listar_personagens,
-                  4: self.atualizar_personagem,
-                  5: self.acessar_inventario,
-                  6: self.gerar_relatorio,
-                  0: self.retornar
-                  }
-        while True:
-            opcoes[self.__tela_personagem.tela_opcoes()]()
+        try:
+            opcoes = {1: self.adicionar_personagem,
+                    2: self.remover_personagem,
+                    3: self.listar_personagens,
+                    4: self.atualizar_personagem,
+                    5: self.acessar_inventario,
+                    6: self.gerar_relatorio,
+                    0: self.retornar
+                    }
+            while True:
+                opcao_selecionada = self.__tela_personagem.tela_opcoes()
+                if opcao_selecionada == 'ação interrompida':
+                    raise JanelaFechadaException()
+                opcoes[opcao_selecionada]()
+        except JanelaFechadaException:
+            self.retornar()
+

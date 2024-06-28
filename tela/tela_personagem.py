@@ -15,6 +15,8 @@ class TelaPersonagem:
         window = sg.Window('OPÇÕES PERSONAGEM').Layout(layout)
         button, values = window.Read()
         window.close()
+        if button in (sg.WIN_CLOSED, 'Retornar'):
+            return 'ação interrompida'
         return button
 
     # pergunta ao usuário os dados necessários para criar o personagem
@@ -32,7 +34,8 @@ class TelaPersonagem:
             button, values = window.Read()
 
             if button in (sg.WIN_CLOSED, 'Cancel'):
-                break
+                window.close()
+                return 'ação interrompida'
 
             nome = values['nome']
             nivel = values['nivel']
@@ -69,6 +72,8 @@ class TelaPersonagem:
         window = sg.Window('REMOVER PERSONAGEM').Layout(layout)
         button, values = window.Read()
         window.close()
+        if button in (sg.WIN_CLOSED, 'Cancel'):
+            return 'ação interrompida'
         return values['nome']
 
     # mostra todos os personagens existentes
