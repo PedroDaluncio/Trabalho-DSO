@@ -9,6 +9,7 @@ class ControleSessao:
         self.__controle_principal = controle_principal
         self.__tela_sessao = TelaSessao()
         self.__sessao_dao = SessaoDAO()
+        self.__sessao_selecionado = "vazio"
 
     def registrar_sessao(self):
         obter_data = self.__tela_sessao.obter_data_sessao()
@@ -159,8 +160,10 @@ class ControleSessao:
         except TypeError:
             indice_selecionado = 0
         try:
-            self.__jogador_selecionado = self.__jogador_dao.listagem()[indice_selecionado][0]
+            self.__sessao_selecionado = self.__sessao_dao.listagem()[indice_selecionado][0]
         except IndexError:
-            self.__jogador_selecionado = 0
+            self.__sessao_selecionado = 0
+        except TypeError:
+            self.__sessao_selecionado = 0
         funcao_escolhida = lista_opcoes[retorno_da_tela[0]]
         funcao_escolhida()

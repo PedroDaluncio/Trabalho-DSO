@@ -28,7 +28,9 @@ class TelaJogador:
             return [0, [0]]
 
     def pega_dados_jogador(self):
-
+        layout = [
+            [sg.Text("")]
+        ]
         print('----- Dados do Jogador -----')
         nome = input('Nome: ')
         while not all(caractere.isalpha() or caractere.isspace() for caractere in nome):

@@ -2,7 +2,7 @@ import PySimpleGUI as sg
 
 
 class TelaSessao:
-    def tela_opcoes(self):
+    def tela_opcoes(self, dados):
         layout = [
             [sg.Text("---Jogadores---")],
             [sg.Table(values=[], headings=["Data", "Jogadores", "Personagens"], max_col_width=25,
