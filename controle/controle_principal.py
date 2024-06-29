@@ -44,7 +44,10 @@ class ControlePrincipal:
             0: self.encerra_sistema
         }
         opcao_escolhida = self.__tela_principal.tela_opcoes()
-        lista_opcoes[opcao_escolhida]()
+        try:
+            lista_opcoes[opcao_escolhida]()
+        except KeyError:
+            lista_opcoes[0]()
 
     def inicializa_sistema(self):
         self.mostrar_tela()
