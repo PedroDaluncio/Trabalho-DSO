@@ -13,7 +13,7 @@ class Personagem():
         #quantos níveis o personagem ganhou, sendo utilizado no relatório
         self.__qt_niveis_adquiridos = 0
         self.__inventario = {}
-        self.__itens_adquiridos = []
+        self.__itens_adquiridos = [] 
         self.__itens_perdidos = []
 
     #getters e setters:

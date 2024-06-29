@@ -4,6 +4,7 @@ from outras_classes.arremesavel import Arremesavel
 from outras_classes.consumivel import Consumivel
 from outras_classes.equipavel import Equipavel
 from tratamento_excesoes.excecao_close import JanelaFechadaException
+from tratamento_excesoes.excecao_atualizar_item import AtualizarItemException
 
 class ControleInventario:
     def __init__(self, controle_personagem):
@@ -222,23 +223,25 @@ class ControleInventario:
                             raise JanelaFechadaException()
                         #realiza a verificação de qual atributo será
                         # atualizado
-                        if mudar_atributo == 1:
-                            item.nome = novo_valor
-                        elif mudar_atributo == 2:
-                            item.valor = novo_valor
-                        elif mudar_atributo == 3:
-                            item.efeito = novo_valor
-                        elif mudar_atributo == 4:
-                            item.dano = novo_valor
-                        elif mudar_atributo == 5 and opcao_tipo_item == 1:
-                            item.alcance = novo_valor
-                        elif mudar_atributo == 6 and opcao_tipo_item == 3:
-                            item.duracao = novo_valor
-                        elif mudar_atributo == 7 and opcao_tipo_item == 2:
-                            item.durabilidade = novo_valor
-                        else:
-                            self.__tela_inventario.mostra_mensagem(
-                                "ERRO: O item não possui esse atributo!")
+                        try:
+                            if mudar_atributo == 1:
+                                item.nome = novo_valor
+                            elif mudar_atributo == 2:
+                                item.valor = novo_valor
+                            elif mudar_atributo == 3:
+                                item.efeito = novo_valor
+                            elif mudar_atributo == 4:
+                                item.dano = novo_valor
+                            elif mudar_atributo == 5 and opcao_tipo_item == 1:
+                                item.alcance = novo_valor
+                            elif mudar_atributo == 6 and opcao_tipo_item == 3:
+                                item.duracao = novo_valor
+                            elif mudar_atributo == 7 and opcao_tipo_item == 2:
+                                item.durabilidade = novo_valor
+                            else:
+                                raise AtualizarItemException()
+                        except AtualizarItemException as error:
+                            self.__tela_inventario.mostra_mensagem(error)
                             self.mostra_tela()
             else:
                 self.__tela_inventario.mostra_mensagem(
@@ -275,10 +278,10 @@ class ControleInventario:
     def mostra_tela(self):
         try:
             opcoes = {1: self.adicionar_item,
-                    2: self.remover_item,
-                    3: self.atualizar_item,
-                    0: self.__controle_personagem.mostra_tela
-                    }
+                      2: self.remover_item,
+                      3: self.atualizar_item,
+                      0: self.__controle_personagem.mostra_tela
+                     }
             while True:
                 opcao_escolhida = self.__tela_inventario.tela_principal(self.criar_tabela())
                 if opcao_escolhida == 'ação interrompida':

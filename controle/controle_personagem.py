@@ -255,4 +255,3 @@ class ControlePersonagem:
                 opcoes[opcao_selecionada]()
         except JanelaFechadaException:
             self.retornar()
-
