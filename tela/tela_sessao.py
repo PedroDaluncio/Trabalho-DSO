@@ -1,18 +1,30 @@
+import PySimpleGUI as sg
 
 
 class TelaSessao:
     def tela_opcoes(self):
-        print("-------- Sessões --------")
-        print("Escolha uma opção")
-        print("1 - Registrar Sessão")
-        print("2 - Alterar Sessão")
-        print("3 - Listar Sessões")
-        print("4 - Excluir Sessão")
-        print("0 - Voltar")
-        opcao = input("Escolha uma opção: ")
-        while opcao not in ["1", "2", "3", "4", "0"]:
-            opcao = input("OPÇÃO INVÁLIDA, TENTE NOVAMENTE: ")
-        return int(opcao)
+        layout = [
+            [sg.Text("---Jogadores---")],
+            [sg.Table(values=[], headings=["Data", "Jogadores", "Personagens"], max_col_width=25,
+                      enable_events=False,
+                      auto_size_columns=True,
+                      justification='c',
+                      num_rows=10,
+                      alternating_row_color='lightblue',
+                      key='seleção',
+                      tooltip='Lista com os Jogadores')],
+            [sg.Button('Registrar', key=1),
+             sg.Button('Editar', key=2),
+             sg.Button('Excluir', key=4),
+             sg.Button('Retornar', key=0)]
+        ]
+        window = sg.Window('Tela Sessão', layout)
+        button, values = window.read()
+        window.close()
+        try:
+            return [button, values['seleção']]
+        except KeyError:
+            return [0, [0]]
 
     def selecionar_edicao(self):
         print("Escolha o que deseja editar")

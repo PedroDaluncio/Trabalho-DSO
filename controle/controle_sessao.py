@@ -151,6 +151,16 @@ class ControleSessao:
             4: self.excluir_sessao,
             0: self.retornar
         }
-        tela_ativa = True
-        while tela_ativa:
-            lista_opcoes[self.__tela_sessao.tela_opcoes()]()
+        retorno_da_tela = self.__tela_sessao.tela_opcoes(self.__sessao_dao.listagem())
+        try:
+            indice_selecionado = (retorno_da_tela[1])[0]
+        except IndexError:
+            indice_selecionado = 0
+        except TypeError:
+            indice_selecionado = 0
+        try:
+            self.__jogador_selecionado = self.__jogador_dao.listagem()[indice_selecionado][0]
+        except IndexError:
+            self.__jogador_selecionado = 0
+        funcao_escolhida = lista_opcoes[retorno_da_tela[0]]
+        funcao_escolhida()
