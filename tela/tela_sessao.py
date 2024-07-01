@@ -3,37 +3,32 @@ import PySimpleGUI as sg
 
 class TelaSessao:
     def tela_opcoes(self, dados):
-        layout = [
-            [sg.Text("---Sessao---")],
-            [sg.Table(values=[dados], headings=["Data", "Jogadores", "Personagens"], max_col_width=25,
-                      enable_events=False,
-                      auto_size_columns=True,
-                      justification='c',
-                      num_rows=10,
-                      alternating_row_color='lightblue',
-                      key='seleção',
-                      tooltip='Lista com os Jogadores')],
-            [sg.Button('Registrar', key=1),
-             sg.Button('Editar', key=2),
-             sg.Button('Excluir', key=4),
-             sg.Button('Retornar', key=0)]
-        ]
+        layout = [[sg.Text('Sessões cadastrados:')],
+                  [sg.Listbox(dados, size=(20, 2))],
+                  [sg.Button('Registrar', key=1),
+                   sg.Button('Editar', key=2),
+                   sg.Button('Excluir', key=4),
+                   sg.Button('Retornar', key=0)]
+                  ]
         window = sg.Window('Tela Sessão', layout)
         button, values = window.read()
         window.close()
         try:
-            return [button, values['seleção']]
+            return button, values['seleção']
         except KeyError:
-            return [0, [0]]
+            return 1, [0]
 
     def selecionar_edicao(self):
-        print("Escolha o que deseja editar")
-        print("1 - Editar Data")
-        print("2 - Editar Jogadores")
-        print("3 - Editar Personagens")
-        print("0 - Voltar")
-        opcao = int(input("Escolha uma opção: "))
-        return opcao
+        layout = [[sg.Text('Escolha o que você quer mudar na sessao')],
+                  [sg.Button('Data', key="data"), sg.Button('Jogadores', key="jogador")],
+                  sg.Button("Personagens", key="personagem"),
+                  [sg.Cancel()]]
+        window = sg.Window('Editar sessão').Layout(layout)
+        button, values = window.Read()
+        window.close()
+        if button in (sg.WIN_CLOSED, 'Cancel'):
+            return 'ação interrompida'
+        return button
 
     def selecionar_operacao(self):
         print("Escolha o que deseja fazer")

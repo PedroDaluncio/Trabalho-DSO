@@ -41,19 +41,10 @@ class ControleJogador:
         if self.__jogador_dao.get_all():
             objeto = self.__jogador_dao.seleciona_um(self.jogador_selecionado)
             personagem = self.__controle_principal.controle_personagem.selecionar_personagem()
-            if personagem.nome not in objeto.personagens.keys():
-                objeto.personagens[personagem.nome] = personagem
-                self.__tela_jogador.mostrar_mensagem("O personagem "
-                                                     f"{personagem.nome}"
-                                                     " foi cadastrado ao"
-                                                     " jogador "
-                                                     f"{objeto.nome}!")
-            else:
-                self.__tela_jogador.mostrar_mensagem("Personagem ja pertence a este jogador")
-                self.mostrar_tela()
         else:
             self.__tela_jogador.mostrar_mensagem("Não há jogadores cadastrados")
             self.mostrar_tela()
+        self.mostrar_tela()
 
     def editar_jogador(self):
         if self.__jogador_dao.get_all():
