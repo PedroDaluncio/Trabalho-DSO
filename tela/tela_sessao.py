@@ -4,8 +4,8 @@ import PySimpleGUI as sg
 class TelaSessao:
     def tela_opcoes(self, dados):
         layout = [
-            [sg.Text("---Jogadores---")],
-            [sg.Table(values=[], headings=["Data", "Jogadores", "Personagens"], max_col_width=25,
+            [sg.Text("---Sessao---")],
+            [sg.Table(values=[dados], headings=["Data", "Jogadores", "Personagens"], max_col_width=25,
                       enable_events=False,
                       auto_size_columns=True,
                       justification='c',
@@ -52,13 +52,19 @@ class TelaSessao:
         return nome
 
     def obter_data_sessao(self):
-        print("insira a data da sessão ")
-        dia = input("insira o dia: ")
-        mes = input("insira o mês(em decimal): ")
-        ano = input("insira o ano: ")
-        hora = input("insira apenas a hora: ")
-        return {"ano": int(ano), "dia": int(dia),
-                "mes": int(mes), "hora": int(hora)}
+        layout = [
+            [sg.Text(text="Insira a data da sessão")],
+            [sg.Text(text="Insidra o dia", size=(20, 1)), sg.InputText(size=(15, 1), key="dia")],
+            [sg.Text(text="Insidra o mês(em decimal)", size=(20, 1)), sg.InputText(size=(15, 1), key="mes")],
+            [sg.Text(text="Insidra o ano", size=(20, 1)), sg.InputText(size=(15, 1), key="ano")],
+            [sg.Text(text="Insidra apenas a hora", size=(20, 1)), sg.InputText(size=(15, 1), key="hora")],
+            [sg.Ok(), sg.Cancel()]
+        ]
+        window = sg.Window("Inserir dados", layout)
+        button, values = window.read()
+        window.close()
+
+        return button, values
 
     def mostrar_sessao(self, dados_sessao):
         print("Data da sessão: ", dados_sessao["data"])

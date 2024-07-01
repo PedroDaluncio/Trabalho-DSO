@@ -214,14 +214,17 @@ class ControlePersonagem:
     def selecionar_personagem(self):
         try:
             if self.__personagens.get_all():
+                lista_para_sessao = []
                 lista_personagens = []
                 for personagem in self.__personagens.get_all():
                     lista_personagens.append(personagem.nome)
-                nome = self.__tela_personagem.pega_nome_personagem(
+                button, nome = self.__tela_personagem.pega_nome_personagem(
                     lista_personagens)
                 if nome == 'ação interrompida':
                     raise JanelaFechadaException()
-                return self.__personagens.get(nome)
+                if button == "OK":
+                    lista_para_sessao.append(nome)
+                return lista_para_sessao
             self.__tela_personagem.mostra_mensagem(
                 "Não há personagens cadastrados")
         except JanelaFechadaException:

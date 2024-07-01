@@ -109,7 +109,7 @@ class TelaPersonagem:
         window.close()
         if button in (sg.WIN_CLOSED, 'Cancel'):
             return 'ação interrompida'
-        return values['nome']
+        return button, values['nome']
 
     # faz o usuário digitar um novo valor para atualizar o personagem
     def pega_dado_atualizacao(self, atributo_ha_ser_atualizado):

@@ -2,6 +2,7 @@ import datetime
 from tela.tela_sessao import TelaSessao
 from entidade.Sessao import Sessao
 from persistencia.sessao_dao import SessaoDAO
+from persistencia.jogador_dao import JogadorDAO
 
 
 class ControleSessao:
@@ -9,43 +10,37 @@ class ControleSessao:
         self.__controle_principal = controle_principal
         self.__tela_sessao = TelaSessao()
         self.__sessao_dao = SessaoDAO()
+        self.__jogador_dao = JogadorDAO()
         self.__sessao_selecionado = "vazio"
 
     def registrar_sessao(self):
-        obter_data = self.__tela_sessao.obter_data_sessao()
-        data_sessao = datetime.datetime(obter_data["ano"], obter_data["mes"],
-                                        obter_data["dia"], obter_data["hora"])
+        ano, mes, dia, hora = ("1900", "1", "1", "12")
+        botao, obter_data = self.__tela_sessao.obter_data_sessao()
+        if botao == "Cancel":
+            self.retornar()
+            ano = int(obter_data["ano"])
+            mes = int(obter_data["mes"])
+            dia = int(obter_data["dia"])
+            hora = int(obter_data["hora"])
+        data_sessao = f'{dia}/{mes}/{ano}_{hora}h'
 
         lista_de_jogadores_participantes = []
-        self.__controle_principal.controle_jogador.listar_jogadores()
-        self.__tela_sessao.mostrar_mensagem("Insira os jogadores participantes (insira 0 para terminar)")
-        while True:
-            jogador = self.__controle_principal.controle_jogador.selecionar_jogador()
-            if jogador == 0:
-                break
-            elif jogador is not None:
-                lista_de_jogadores_participantes.append(jogador.nome)
-            else:
-                self.__tela_sessao.mostrar_mensagem("Jogador não cadastrado, tente novamente")
 
-        lista_de_personagens_participantes = []
-        self.__tela_sessao.mostrar_mensagem("Insira os personagens "
-                                            "participantes "
-                                            "(insira 0 para terminar)")
         while True:
-            personagem = self.__controle_principal.controle_personagem.selecionar_personagem()
-            if personagem == 0:
+            botao, valores = self.__controle_principal.controle_jogador.tela_com_todos()
+            if botao == "Finalizar":
                 break
-            elif personagem is not None:
-                lista_de_personagens_participantes.append(personagem.nome)
             else:
-                self.__tela_sessao.mostrar_mensagem("")
+                lista_de_jogadores_participantes.append(self.__controle_principal.controle_jogador.jogador_selecionado)
+        print(lista_de_jogadores_participantes)
 
-        if lista_de_jogadores_participantes and \
-                lista_de_personagens_participantes:
-            sessao = Sessao(data_sessao, lista_de_jogadores_participantes,
-                            lista_de_personagens_participantes)
-            self.__sessao_dao.add(sessao)
+        lista_de_personagens_participantes = self.__controle_principal.controle_personagem.selecionar_personagem()
+        print(lista_de_personagens_participantes)
+
+        sessao = Sessao(data_sessao, lista_de_jogadores_participantes,
+                        lista_de_personagens_participantes)
+        self.__sessao_dao.add(sessao)
+        self.mostrar_tela()
 
     def busca_sessao_por_data(self, ano: int, mes: int, dia: int, hora: int):
         if self.__sessao_dao.get_all():

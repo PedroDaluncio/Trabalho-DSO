@@ -50,8 +50,10 @@ class ControleJogador:
                                                      f"{objeto.nome}!")
             else:
                 self.__tela_jogador.mostrar_mensagem("Personagem ja pertence a este jogador")
+                self.mostrar_tela()
         else:
             self.__tela_jogador.mostrar_mensagem("Não há jogadores cadastrados")
+            self.mostrar_tela()
 
     def editar_jogador(self):
         if self.__jogador_dao.get_all():
@@ -68,6 +70,7 @@ class ControleJogador:
             self.mostrar_tela()
         else:
             self.__tela_jogador.mostrar_mensagem("Não há jogadores cadastrado")
+            self.mostrar_tela()
 
     def excluir_jogador(self):
         if self.__jogador_dao.get_all():
@@ -93,16 +96,26 @@ class ControleJogador:
             5: self.atribuir_personagem,
             0: self.retornar
         }
-        retorno_da_tela = self.__tela_jogador.tela_opcoes(self.__jogador_dao.listagem())
+        button, indice_selecionado = self.__tela_jogador.tela_opcoes(self.__jogador_dao.listagem())
+        if not indice_selecionado:
+            indice_selecionado = [0]
+        indice = indice_selecionado[0]
+        print(indice)
         try:
-            indice_selecionado = (retorno_da_tela[1])[0]
+            self.__jogador_selecionado = self.__jogador_dao.listagem()[indice][0]
         except IndexError:
-            indice_selecionado = 0
-        except TypeError:
-            indice_selecionado = 0
-        try:
-            self.__jogador_selecionado = self.__jogador_dao.listagem()[indice_selecionado][0]
-        except IndexError:
-            self.__jogador_selecionado = 0
-        funcao_escolhida = lista_opcoes[retorno_da_tela[0]]
+            self.__jogador_selecionado = "Vazio"
+        funcao_escolhida = lista_opcoes[button]
         funcao_escolhida()
+
+    def tela_com_todos(self):
+        button, indice_selecionado = self.__tela_jogador.tela_com_todos(self.__jogador_dao.listagem())
+        if not indice_selecionado:
+            indice_selecionado = [0]
+        indice = indice_selecionado[0]
+        print(indice)
+        try:
+            self.__jogador_selecionado = self.__jogador_dao.listagem()[indice][0]
+        except IndexError:
+            self.__jogador_selecionado = "Vazio"
+        return button, indice_selecionado

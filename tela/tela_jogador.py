@@ -5,7 +5,7 @@ class TelaJogador:
     def tela_opcoes(self, dados):
         layout = [
             [sg.Text("---Jogadores---")],
-            [sg.Table(values=dados, headings=["Nome", "Idade", "Personagens"], max_col_width=25,
+            [sg.Table(values=dados, headings=["Nome", "Idade"], max_col_width=25,
                       enable_events=False,
                       auto_size_columns=True,
                       justification='c',
@@ -13,33 +13,29 @@ class TelaJogador:
                       alternating_row_color='darkblue',
                       key='seleção',
                       tooltip='Lista com os Jogadores')],
-            [sg.Button('Adicionar', key=1),
-             sg.Button('Editar', key=2),
-             sg.Button('Excluir', key=4)],
-            [sg.Button('Atribuir Personagem', key=5),
-             sg.Button('Retornar', key=0)]
+            [sg.Button('Adicionar', key=1), sg.Button('Editar', key=2)],
+            [sg.Button('Atribuir Personagem', key=5)],
+            [sg.Button('Excluir', key=4), sg.Button('Retornar', key=0)]
         ]
         window = sg.Window('Tela Jogador', layout)
         button, values = window.read()
         window.close()
         try:
-            return [button, values['seleção']]
+            return button, values['seleção']
         except KeyError:
-            return [0, [0]]
+            return 0, [0]
 
     def pega_dados_jogador(self):
         layout = [
-            [sg.Text("")]
+            [sg.Text("Insira um nome", size=(15, 1)), sg.InputText(size=(15, 1), key="nome")],
+            [sg.Text("Insira uma idade", size=(15, 1)), sg.InputText(size=(15, 1), key="idade")],
+            [sg.Ok()]
         ]
-        print('----- Dados do Jogador -----')
-        nome = input('Nome: ')
-        while not all(caractere.isalpha() or caractere.isspace() for caractere in nome):
-            nome = input('Nome inválido, tente novamente: ')
-        idade = input('Idade: ')
-        while not all(caractere.isdigit() or caractere.isspace() for caractere in idade):
-            idade = input('Idade inválida, tente novamente: ')
-
-        return {'nome': nome, 'idade': int(idade)}
+        window = sg.Window("Dados do Jogador", layout)
+        button, values = window.read()
+        window.close()
+        if button == "Ok":
+            return values
 
     def mostrar_mensagem(self, mensagem):
         sg.popup(mensagem)
@@ -65,3 +61,25 @@ class TelaJogador:
         button, key = window.read()
         window.close()
         return key[0]
+
+    def tela_com_todos(self, dados):
+        layout = [
+            [sg.Text("Adicione jogadores participantes")],
+            [sg.Table(values=dados, headings=["Nome", "Idade", "Personagens"], max_col_width=25,
+                      enable_events=False,
+                      auto_size_columns=True,
+                      justification='c',
+                      num_rows=10,
+                      alternating_row_color='darkblue',
+                      key='seleção',
+                      tooltip='Lista com os Jogadores')],
+            [sg.Button('Adicionar', key='Adicionar'),
+             [sg.Button('Finalizar', key='Finalizar')]]
+        ]
+        window = sg.Window('Tela Jogador', layout)
+        button, values = window.read()
+        window.close()
+        try:
+            return button, values['seleção']
+        except KeyError:
+            return 0, [0]
