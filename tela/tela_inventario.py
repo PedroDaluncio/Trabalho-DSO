@@ -1,174 +1,227 @@
+import PySimpleGUI as sg
 
 
 class TelaInventario:
 
-    #método que mostra as opções para o usuário
-    def tela_opcoes(self):
-        print("-------- INVENTÁRIO ----------")
-        print("Escolha a opcao")
-        print("1 - Incluir Item")
-        print("2 - Remover Item")
-        print("3 - Listar Itens")
-        print("4 - Listar Inventário")
-        print("5 - Alterar Itens")
-        print("0 - Retornar")
-        opcao = input("Escolha a opção: ")
-        #faz a verificação se a opção escolhida é valida
-        while opcao not in ["1", "2", "3", "4", "5", "0"]:
-            opcao = input("Entrada inválida, digite novamente: ")
-        return int(opcao)
+    # método que mostra as opções para o usuário
+    def tela_principal(self, inventario):
+        layout = [
+            [sg.Table(values=inventario, headings=['Arremesavel', 'Consumivel', 'Equipavel'], key='-TABLE-',
+                      enable_events=False, display_row_numbers=False)],
+            [sg.Button('Adicionar Item', key=1), sg.Button('Remover Item', key=2) ,sg.Button('Editar Item', key=3), sg.Button('Retornar', key=0)]
+                ]
+        window = sg.Window('INVENTÁRIO').Layout(layout)
+        button, values = window.Read()
+        window.close()
+        if button in (sg.WIN_CLOSED, 'Retornar'):
+            return 'ação interrompida'
+        return int(button)
 
-    #método que faz o usuário escolher um tipo de item
+    # método que faz o usuário escolher um tipo de item
     def escolhe_tipo_item(self):
-        self.mostra_mensagem('')
-        print("-------- SELEÇÃO DO TIPO DE ITEM ----------")
-        print("Escolha a opcao")
-        print("1 - Arremesável")
-        print("2 - Equipável")
-        print("3 - Consumível")
-        print("0 - Retornar")
-        opcao = int(input("Escolha a opção: "))
-        #verifica se a opção é valida
-        while opcao not in (0, 1, 2, 3):
-            opcao = input("Entrada inválida, digite novamente: ")
-        self.mostra_mensagem('')
-        return opcao
+        layout = [[sg.Text('Escolha o tipo de item')],
+                  [sg.Button('Arremesável', key=1), sg.Button('Equipável', key=2)],
+                  [sg.Button('Consumível', key=3), sg.Cancel()]]
 
-    #método que pega os dados de itens do tipo consumível
+        window = sg.Window('SELEÇÃO DE TIPO DE ITEM').Layout(layout)
+        button, values = window.Read()
+        window.close()
+        if button in (sg.WIN_CLOSED, 'Cancel'):
+            return 'ação interrompida'
+        return int(button)
+
+    # método que pega os dados de itens do tipo consumível
     def dados_consumivel(self):
-        print("-------- DADOS CONSUMÍVEL ----------")
-        nome = input("Nome: ")
-        # verifica se a variavel nome possui apenas letras ou espaços
-        # isalpha = é letra, isspace = é espaço, isdigit = é número
-        while not all(caractere.isalpha() or caractere.isspace()
-                      for caractere in nome):
-            nome = input("Nome inválido, insira novamente: ")
-        valor = input("Valor: ")
-        while not all(caractere.isdigit() for caractere in valor):
-            valor = input("Valor inválido, insira novamente: ")
-        efeito = input("Efeito: ")
-        while not all(caractere.isalpha() or caractere.isspace()
-                      for caractere in efeito):
-            efeito = input("Efeito inválido, insira novamente:")
-        dano = input("Dano: ")
-        while not all(caractere.isdigit() for caractere in dano):
-            dano = input("Dano inválido, insira novamente: ")
-        duracao = input("Duracao: ")
-        while not all(caractere.isdigit() for caractere in duracao):
-            duracao = input("Duracao inválido, insira novamente: ")
-        return {"nome": nome, "valor": int(valor), "efeito": efeito,
-                "dano": int(dano), "duracao": int(duracao)}
+        layout = [[sg.Text('Nome:', size=(10, 1)), sg.Input(key='nome')],
+                  [sg.Text('Valor:', size=(10, 1)), sg.Input(key='valor')],
+                  [sg.Text('Efeito:', size=(10, 1)), sg.Input(key='efeito')],
+                  [sg.Text('Dano:', size=(10, 1)), sg.Input(key='dano')],
+                  [sg.Text('Duracao:', size=(10,1)), sg.Input(key='duracao')],
+                  [sg.Submit(), sg.Cancel()]]
 
-    #método que pega os dados do item do tipo Equipavel
-    def dados_equipavel(self):
-        print("-------- DADOS EQUIPAVEL ----------")
-        nome = input("Nome: ")
-        # verifica se a variavel nome possui apenas letras ou espaços
-        # isalpha = é letra, isspace = é espaço, isdigit = é número
-        while not all(caractere.isalpha() or caractere.isspace()
-                      for caractere in nome):
-            nome = input("Nome inválido, insira novamente: ")
-        valor = input("Valor: ")
-        while not all(caractere.isdigit() for caractere in valor):
-            valor = input("Valor inválido, insira novamente: ")
-        efeito = input("Efeito: ")
-        while not all(caractere.isalpha() or caractere.isspace()
-                      for caractere in efeito):
-            efeito = input("Efeito inválido, insira novamente:")
-        dano = input("Dano: ")
-        while not all(caractere.isdigit() for caractere in dano):
-            dano = input("Dano inválido, insira novamente: ")
-        durabilidade = input("Durabilidade: ")
-        while not all(caractere.isdigit() for caractere in durabilidade):
-            durabilidade = input(
-                "Durabilidade inválida, insira novamente: ")
-        return {"nome": nome, "valor": int(valor), "efeito": efeito,
-                "dano": int(dano), "durabilidade": int(durabilidade)}
+        window = sg.Window('DADOS CONSUMIVEL').Layout(layout)
+        while True:
+            button, values = window.Read()
 
-    #método que pega os dados de item do tipo Arremesavel
-    def dados_arremesavel(self):
-        print("-------- DADOS ARREMESAVEL ----------")
-        nome = input("Nome: ")
-        # verifica se a variavel nome possui apenas letras ou espaços
-        # isalpha = é letra, isspace = é espaço, isdigit = é número
-        while not all(caractere.isalpha() or caractere.isspace()
-                      for caractere in nome):
-            nome = input("Nome inválido, insira novamente: ")
-        valor = input("Valor: ")
-        while not all(caractere.isdigit() for caractere in valor):
-            valor = input("Valor inválido, insira novamente: ")
-        efeito = input("Efeito: ")
-        while not all(caractere.isalpha() or caractere.isspace()
-                      for caractere in efeito):
-            efeito = input("Efeito inválido, insira novamente:")
-        dano = input("Dano: ")
-        while not all(caractere.isdigit() for caractere in dano):
-            dano = input("Dano inválido, insira novamente: ")
-        alcance = input("Alcance: ")
-        while not all(caractere.isdigit() for caractere in alcance):
-            alcance = input("Alcance inválido, insira novamente: ")
-        return {"nome": nome, "valor": int(valor), "efeito": efeito,
-                "dano": int(dano), "alcance": int(alcance)}
+            if button in (sg.WIN_CLOSED, 'Cancel'):
+                window.close()
+                return 'ação interrompida'
 
-    #método que pega o nome de um item que será removido
-    def remover_item(self):
-        nome_item = input(
-            "Digite o nome do item que será removido: ")
-        return nome_item
+            nome = values['nome']
+            valor = values['valor']
+            efeito = values['efeito']
+            dano = values['dano']
+            duracao = values['duracao']
 
-    #método que recebe uma lista de itens e mostra ela
-    def listar_itens(self, lista_itens):
-        for item in lista_itens:
-            #faz a verificação se é o ultimo item na lista a fim de
-            # arrumar a vírgula e espaço após o item
-            if item == lista_itens[-1]:
-                    print(item.nome, end="")
+            # Verificar se o nome contém apenas letras
+            if not all(caractere.isalpha() or caractere.isspace()
+                       for caractere in nome) or not nome:
+                sg.popup_error(
+                    'O Nome do consumivel deve conter apenas letras.')
+            # Verificar se o nível é um número
+            elif not all(caractere.isdigit() for caractere in valor) or not valor:
+                sg.popup_error('O valor do consumível deve ser um número!')
+            # Verificar se a classe não está vazia
+            elif not all(caractere.isalpha() or caractere.isspace()
+                         for caractere in efeito) or not efeito:
+                sg.popup_error('O efeito não pode estar vazio ou conter números')
+            # Verificar se a raça não está vazia
+            elif not all(caractere.isdigit() for caractere in dano) or not dano:
+                sg.popup_error('O valor do dano deve ser um número')
+            elif not all(caractere.isdigit() for caractere in duracao) or not duracao:
+                sg.popup_error('O valor da duracao deve ser um número')
             else:
-                print(item.nome, end=", ")
-        print('')
+                window.close()
+                return {"nome": nome, "valor": int(valor), "efeito": efeito,
+                        "dano": int(dano), "duracao": int(duracao)}
 
-    #método que lista todos os itens do Inventário
-    #OBS: Ele é chamado três vezes, uma vez para cada tipo de item
-    def listar_inventario(self, itens, tipo_item):
-        print(f"Items do tipo {tipo_item}:")
-        if not itens:
-            print("Você não possui nenhum item desse tipo!")
-        else:
-            for item in itens:
-                if item == itens[-1]:
-                    print(item.nome, end="")
-                else:
-                    print(item.nome, end=", ")
-            print('')
+    # método que pega os dados do item do tipo Equipavel
+    def dados_equipavel(self):
+        layout = [[sg.Text('Nome:', size=(10, 1)), sg.Input(key='nome')],
+                  [sg.Text('Valor:', size=(10, 1)), sg.Input(key='valor')],
+                  [sg.Text('Efeito:', size=(10, 1)), sg.Input(key='efeito')],
+                  [sg.Text('Dano:', size=(10, 1)), sg.Input(key='dano')],
+                  [sg.Text('Durabilidade:', size=(10,1)), sg.Input(key='durabilidade')],
+                  [sg.Submit(), sg.Cancel()]]
 
-    #método que faz o usuário escolher um tipo de item
+        window = sg.Window('DADOS EQUIPAVEL').Layout(layout)
+        while True:
+            button, values = window.Read()
+
+            if button in (sg.WIN_CLOSED, 'Cancel'):
+                window.close()
+                return 'ação interrompida'
+
+            nome = values['nome']
+            valor = values['valor']
+            efeito = values['efeito']
+            dano = values['dano']
+            durabilidade = values['durabilidade']
+
+            # Verificar se o nome contém apenas letras
+            if not all(caractere.isalpha() or caractere.isspace()
+                       for caractere in nome) or not nome:
+                sg.popup_error(
+                    'O Nome do consumivel deve conter apenas letras.')
+            # Verificar se o nível é um número
+            elif not all(caractere.isdigit() for caractere in valor) or not valor:
+                sg.popup_error('O valor do consumível deve ser um número!')
+            # Verificar se a classe não está vazia
+            elif not all(caractere.isalpha() or caractere.isspace()
+                         for caractere in efeito) or not efeito:
+                sg.popup_error('O efeito não pode estar vazio ou conter números')
+            # Verificar se a raça não está vazia
+            elif not all(caractere.isdigit() for caractere in dano) or not dano:
+                sg.popup_error('O valor do dano deve ser um número')
+            elif not all(caractere.isdigit() for caractere in durabilidade) or not durabilidade:
+                sg.popup_error('O valor da durabilidade deve ser um número')
+            else:
+                window.close()
+                return {"nome": nome, "valor": int(valor), "efeito": efeito,
+                        "dano": int(dano), "durabilidade": int(durabilidade)}
+
+    # método que pega os dados de item do tipo Arremesavel
+    def dados_arremesavel(self):
+        layout = [[sg.Text('Nome:', size=(10, 1)), sg.Input(key='nome')],
+                  [sg.Text('Valor:', size=(10, 1)), sg.Input(key='valor')],
+                  [sg.Text('Efeito:', size=(10, 1)), sg.Input(key='efeito')],
+                  [sg.Text('Dano:', size=(10, 1)), sg.Input(key='dano')],
+                  [sg.Text('Alcance:', size=(10,1)), sg.Input(key='alcance')],
+                  [sg.Submit(), sg.Cancel()]]
+
+        window = sg.Window('DADOS ARREMESAVEL').Layout(layout)
+        while True:
+            button, values = window.Read()
+
+            if button in (sg.WIN_CLOSED, 'Cancel'):
+                window.close()
+                return 'ação interrompida'
+
+            nome = values['nome']
+            valor = values['valor']
+            efeito = values['efeito']
+            dano = values['dano']
+            alcance = values['alcance']
+
+            # Verificar se o nome contém apenas letras
+            if not all(caractere.isalpha() or caractere.isspace()
+                       for caractere in nome) or not nome:
+                sg.popup_error(
+                    'O Nome do consumivel deve conter apenas letras.')
+            # Verificar se o nível é um número
+            elif not all(caractere.isdigit() for caractere in valor) or not valor:
+                sg.popup_error('O valor do consumível deve ser um número!')
+            # Verificar se a classe não está vazia
+            elif not all(caractere.isalpha() or caractere.isspace()
+                         for caractere in efeito) or not efeito:
+                sg.popup_error('O efeito não pode estar vazio ou conter números')
+            # Verificar se a raça não está vazia
+            elif not all(caractere.isdigit() for caractere in dano) or not dano:
+                sg.popup_error('O valor do dano deve ser um número')
+            elif not all(caractere.isdigit() for caractere in alcance) or not alcance:
+                sg.popup_error('O valor do alcance deve ser um número')
+            else:
+                window.close()
+                return {"nome": nome, "valor": int(valor), "efeito": efeito,
+                        "dano": int(dano), "alcance": int(alcance)}
+
+    # método que faz o usuário escolher um tipo de item
     def opcoes_atualizacao(self):
-        print("-------- ATUALIZAR ITEM ----------")
-        print("Escolha o que deseja atualizar")
-        print("1 - Nome")
-        print("2 - Valor")
-        print("3 - Efeito")
-        print("4 - Dano")
-        print("5 - Alcance")
-        print("6 - Duracao")
-        print("7 - Durabilidade")
-        print("0 - Voltar")
-        opcao = int(input("Digite a sua escolha: "))
-        #verifica se a opção digitada é valida
-        while opcao < 0 or opcao > 7:
-            opcao = int(input("ESCOLHA INVÁLIDA! INSIRA NOVAMENTE: "))
-        return opcao
+        layout = [[sg.Text('Escolha o que deseja atualizar')],
+                  [sg.Button('Nome', key=1), sg.Button('Valor', key=2), sg.Button('Efeito', key=3)],
+                  [sg.Button('Dano', key=4), sg.Button('Alcance', key=5), sg.Button('Duracao', key=6)],
+                  [sg.Button('Durabilidade', key=7), sg.Cancel()]]
+        window = sg.Window('ATUALIZAR ITEM').Layout(layout)
+        button, values = window.Read()
+        window.close()
+        if button in (sg.WIN_CLOSED, 'Cancel'):
+            return 'ação interrompida'
+        return int(button)
 
-    #método que faz o usuário digitar o novo valor de um atributo do item
+    # método que faz o usuário digitar o novo valor de um atributo do item
     def pega_dado_atualizacao(self):
-        dado = input("Insira o novo valor: ")
-        return dado
+        layout = [[sg.Text('Insira o novo valor'), sg.Input(key='valor')],
+                  [sg.Submit(), sg.Cancel()]]
+        window = sg.Window('ATUALIZAÇÃO DE ITEM').Layout(layout)
+        button, values = window.Read()
+        window.close()
+        if button in (sg.WIN_CLOSED, 'Cancel'):
+            return 'ação interrompida'
+        return values['valor']
 
-    #método que pega o nome do item que será atualizado
-    def pega_nome_item_atualizar(self):
-        nome_item = input("Digite o nome do item que será atualizado: ")
-        return nome_item
+    # método que pega o nome do item que será atualizado
+    def pega_nome_item(self, inventario):
 
-    #método que mostra uma mensagem ao usuário
+        layout = [[sg.Text('Escolha um tipo de item:'), sg.Combo(list(inventario.keys()), key='tipo_item', enable_events=True)],
+                  [sg.Text('Itens:')],
+                  [sg.Combo([], key='itens', size=(20, 10))],
+                  [sg.Submit(), sg.Cancel()]]
+
+        window = sg.Window('ESCOLHA UM ITEM').Layout(layout)
+
+        while True:
+            button, values = window.read()
+
+            if button in(sg.WINDOW_CLOSED, 'Cancel'):
+                window.close()
+                return 'ação interrompida'
+            if button == 'Submit' and not values['tipo_item']:
+                self.mostra_mensagem('Escolha um item para remover!')
+            elif button == 'Submit' and values['tipo_item']:
+                break
+
+            # Atualiza os valores da Listbox baseado na chave selecionada
+            if button == 'tipo_item':
+                selected_key = values['tipo_item']
+                window['itens'].update(values=inventario[selected_key])
+
+        window.close()
+        return [values['tipo_item'], values['itens']]
+
+    # método que mostra uma mensagem ao usuário
     def mostra_mensagem(self, mensagem: str):
-        print(mensagem)
+        layout = [[sg.Text(mensagem)],
+                  [sg.OK()]]
+        window = sg.Window("AVISO").Layout(layout)
+        button, values = window.Read()
+        window.close()

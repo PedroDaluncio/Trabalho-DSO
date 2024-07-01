@@ -29,6 +29,12 @@ class DAO(ABC):
         except KeyError:
             pass
 
+    def get(self, key):
+        try:
+            return self.__cache[key]
+        except KeyError:
+            pass
+
     def save(self):
         self.__dump()
 

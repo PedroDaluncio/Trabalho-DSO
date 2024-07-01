@@ -11,26 +11,15 @@ class Inventario:
         #dícionario que contém todos os itens perdidos de um determinado
         #personagem
         self.__itens_perdidos = {}
-        #personagem que está atualmente no inventário
-        self.__personagem = ''
-
-    #getters e setters:
-    @property
-    def personagem(self):
-        return self.__personagem
-
-    @personagem.setter
-    def personagem(self, personagem):
-        self.__personagem = personagem
 
     @property
     def espaco_interno(self):
-        return self.__espaco_interno[self.__personagem]
+        return self.__espaco_interno
 
     @espaco_interno.setter
     def espaco_interno(self, parametros):
         classe, item = parametros
-        self.__espaco_interno[self.__personagem][classe].append(item)
+        self.__espaco_interno[classe].append(item)
 
     @property
     def itens_adquiridos(self):
@@ -39,8 +28,8 @@ class Inventario:
     @itens_adquiridos.setter
     def itens_adquiridos(self, item):
         #adiciona o item na lista de itens adquiridos para o personagem
-        #que está atualmente no invetário
-        self.__itens_adquiridos[self.__personagem].append(item)
+        #que está atualmente no inventário
+        self.__itens_adquiridos.append(item)
 
     @property
     def itens_perdidos(self):
@@ -50,12 +39,12 @@ class Inventario:
     def itens_perdidos(self, item):
         #adiciona o item na lista de itens perdidos para o personagem
         #que está atualmente no invetário
-        self.__itens_perdidos[self.__personagem].append(item)
+        self.__itens_perdidos.append(item)
 
     #cria o inventário para o personagem que está atualmente no
     #inventário, adicionando no espaço interno. Além disso, cria a lista
     #de itens adquiridos e itens perdidos para o personagem
-    def cria_inventario(self, personagem, inventario):
-        self.__espaco_interno[personagem] = inventario
-        self.__itens_adquiridos[personagem] = []
-        self.__itens_perdidos[personagem] = []
+    def cria_inventario(self, inventario):
+        self.__espaco_interno = inventario
+        self.__itens_adquiridos = []
+        self.__itens_perdidos = []
