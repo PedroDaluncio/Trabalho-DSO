@@ -6,6 +6,7 @@ from outras_classes.equipavel import Equipavel
 from tratamento_excesoes.excecao_close import JanelaFechadaException
 from tratamento_excesoes.excecao_atualizar_item import AtualizarItemException
 
+
 class ControleInventario:
     def __init__(self, controle_personagem):
         self.__tela_inventario = TelaInventario()

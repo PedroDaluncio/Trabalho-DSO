@@ -35,5 +35,8 @@ class DAO(ABC):
         except KeyError:
             pass
 
+    def save(self):
+        self.__dump()
+
     def get_all(self):
         return list(self.__cache.values())

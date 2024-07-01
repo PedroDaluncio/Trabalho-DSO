@@ -9,6 +9,7 @@ class ControleSessao:
         self.__controle_principal = controle_principal
         self.__tela_sessao = TelaSessao()
         self.__sessao_dao = SessaoDAO()
+        self.__sessao_selecionado = "vazio"
 
     def registrar_sessao(self):
         obter_data = self.__tela_sessao.obter_data_sessao()
@@ -151,6 +152,18 @@ class ControleSessao:
             4: self.excluir_sessao,
             0: self.retornar
         }
-        tela_ativa = True
-        while tela_ativa:
-            lista_opcoes[self.__tela_sessao.tela_opcoes()]()
+        retorno_da_tela = self.__tela_sessao.tela_opcoes(self.__sessao_dao.listagem())
+        try:
+            indice_selecionado = (retorno_da_tela[1])[0]
+        except IndexError:
+            indice_selecionado = 0
+        except TypeError:
+            indice_selecionado = 0
+        try:
+            self.__sessao_selecionado = self.__sessao_dao.listagem()[indice_selecionado][0]
+        except IndexError:
+            self.__sessao_selecionado = 0
+        except TypeError:
+            self.__sessao_selecionado = 0
+        funcao_escolhida = lista_opcoes[retorno_da_tela[0]]
+        funcao_escolhida()

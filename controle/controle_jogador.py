@@ -9,6 +9,15 @@ class ControleJogador:
         self.__tela_jogador = TelaJogador()
         self.__jogador = Jogador
         self.__jogador_dao = JogadorDAO()
+        self.__jogador_selecionado = "vazio"
+
+    @property
+    def jogador_selecionado(self):
+        return self.__jogador_selecionado
+
+    @jogador_selecionado.setter
+    def jogador_selecionado(self, jogador_selecionado):
+        self.__jogador_selecionado = jogador_selecionado
 
     def busca_jogador_por_nome(self, nome: str):
         for jogador in self.__jogador_dao.get_all():
@@ -24,71 +33,54 @@ class ControleJogador:
         if validacao is None:
             jogador = self.__jogador(dados_jogador["nome"], dados_jogador["idade"])
             self.__jogador_dao.add(jogador)
+            self.mostrar_tela()
         else:
             self.__tela_jogador.mostrar_mensagem("Jogador já cadastrado")
 
     def atribuir_personagem(self):
         if self.__jogador_dao.get_all():
-            self.listar_jogadores()
-            nome_jogador = self.__tela_jogador.seleciona_jogador()
-            jogador_selecionado = self.busca_jogador_por_nome(nome_jogador)
-            if jogador_selecionado is not None:
-                personagem = self.__controle_principal.controle_personagem.selecionar_personagem()
-                if personagem.nome not in jogador_selecionado.personagens.keys():
-                    jogador_selecionado.personagens[personagem.nome] = personagem
-                    self.__tela_jogador.mostrar_mensagem("O personagem "
-                                                         f"{personagem.nome}"
-                                                         " foi cadastrado ao"
-                                                         " jogador "
-                                                         f"{nome_jogador}!")
-                else:
-                    self.__tela_jogador.mostrar_mensagem("Personagem ja pertence a este jogador")
-        else:
-            self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
-
-    def editar_jogador(self):
-        if self.__jogador_dao.get_all():
-            self.listar_jogadores()
-            nome_jogador = self.__tela_jogador.seleciona_jogador()
-            jogador_editado = self.busca_jogador_por_nome(nome_jogador)
-            if jogador_editado is not None:
-                novos_dados_jogador = self.__tela_jogador.pega_dados_jogador()
-                jogador_editado.nome = novos_dados_jogador["nome"]
-                jogador_editado.idade = novos_dados_jogador["idade"]
-        else:
-            self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
-
-    def listar_jogadores(self):
-        if self.__jogador_dao.get_all():
-            for jogador in self.__jogador_dao.get_all():
-                self.__tela_jogador.mostra_jogadores({"nome": jogador.nome, "idade": jogador.idade})
+            objeto = self.__jogador_dao.seleciona_um(self.jogador_selecionado)
+            personagem = self.__controle_principal.controle_personagem.selecionar_personagem()
+            if personagem.nome not in objeto.personagens.keys():
+                objeto.personagens[personagem.nome] = personagem
+                self.__tela_jogador.mostrar_mensagem("O personagem "
+                                                     f"{personagem.nome}"
+                                                     " foi cadastrado ao"
+                                                     " jogador "
+                                                     f"{objeto.nome}!")
+            else:
+                self.__tela_jogador.mostrar_mensagem("Personagem ja pertence a este jogador")
         else:
             self.__tela_jogador.mostrar_mensagem("Não há jogadores cadastrados")
 
-    def selecionar_jogador(self):
+    def editar_jogador(self):
         if self.__jogador_dao.get_all():
-            nome_jogador = self.__tela_jogador.seleciona_jogador()
-            jogador_selecionado = self.busca_jogador_por_nome(nome_jogador)
-            if jogador_selecionado == 0:
-                return 0
-            elif jogador_selecionado is not None:
-                return jogador_selecionado
+            objeto = self.__jogador_dao.seleciona_um(self.jogador_selecionado)
+            escolha = (self.__tela_jogador.tela_com_dois_botoes
+                       ("Escolha o que deseja alterar", "Nome", "Idade"))
+            if escolha == 1:
+                novo_nome = self.__tela_jogador.tela_de_input("Digite o novo nome")
+                objeto.nome = novo_nome
+            elif escolha == 2:
+                nova_idade = self.__tela_jogador.tela_de_input("Digite uma nova idade")
+                objeto.idade = nova_idade
+            self.__jogador_dao.save()
+            self.mostrar_tela()
         else:
-            self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
+            self.__tela_jogador.mostrar_mensagem("Não há jogadores cadastrado")
 
     def excluir_jogador(self):
         if self.__jogador_dao.get_all():
-            self.listar_jogadores()
-            nome_jogador = self.__tela_jogador.seleciona_jogador()
-            nome = self.busca_jogador_por_nome(nome_jogador)
-            if nome is not None:
-                if isinstance(nome, Jogador):
-                    self.__jogador_dao.remove(nome)
-                    self.listar_jogadores()
-                else:
-                    self.__tela_jogador.mostrar_mensagem("Entrada inválida")
+            escolha = (self.__tela_jogador.tela_com_dois_botoes
+                       ("Deseja mesmo excluir?", "Sim", "Não"))
+            if escolha == 1:
+                self.__jogador_dao.remove(self.__jogador_selecionado)
+                self.mostrar_tela()
+            elif escolha == 2:
+                self.mostrar_tela()
         else:
-            self.__tela_jogador.mostrar_mensagem("Jogador não cadastrado")
+            self.__tela_jogador.mostrar_mensagem("Não há jogadores cadastrados")
+            self.mostrar_tela()
 
     def retornar(self):
         self.__controle_principal.mostrar_tela()
@@ -97,13 +89,20 @@ class ControleJogador:
         lista_opcoes = {
             1: self.adicionar_jogador,
             2: self.editar_jogador,
-            3: self.listar_jogadores,
             4: self.excluir_jogador,
             5: self.atribuir_personagem,
             0: self.retornar
         }
-        tela_ativa = True
-        while tela_ativa:
-            opcao_escolhida = self.__tela_jogador.tela_opcoes()
-            funcao_escolhida = lista_opcoes[int(opcao_escolhida)]
-            funcao_escolhida()
+        retorno_da_tela = self.__tela_jogador.tela_opcoes(self.__jogador_dao.listagem())
+        try:
+            indice_selecionado = (retorno_da_tela[1])[0]
+        except IndexError:
+            indice_selecionado = 0
+        except TypeError:
+            indice_selecionado = 0
+        try:
+            self.__jogador_selecionado = self.__jogador_dao.listagem()[indice_selecionado][0]
+        except IndexError:
+            self.__jogador_selecionado = 0
+        funcao_escolhida = lista_opcoes[retorno_da_tela[0]]
+        funcao_escolhida()

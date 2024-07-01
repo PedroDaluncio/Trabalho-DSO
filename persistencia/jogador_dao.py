@@ -10,6 +10,17 @@ class JogadorDAO(DAO):
         if isinstance(jogador, Jogador):
             super().add(jogador.nome, jogador)
 
-    def remove(self, jogador: Jogador):
-        if isinstance(jogador, Jogador):
-            self.remove(jogador.nome)
+    def remove(self, jogador: str):
+        if isinstance(jogador, str):
+            super().remove(jogador)
+
+    def listagem(self):
+        lista = []
+        for jogador in super().get_all():
+            lista.append([jogador.nome, jogador.idade])
+        return lista
+
+    def seleciona_um(self, chave):
+        for jogador in super().get_all():
+            if chave == jogador.nome:
+                return jogador
